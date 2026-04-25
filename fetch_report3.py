@@ -24,6 +24,22 @@ import urllib.request
 import urllib.parse
 import urllib.error
 
+
+def _fmt_duration(seconds: float) -> str:
+    if seconds < 60:
+        return f"{seconds:.0f}s"
+    m, s = divmod(int(seconds), 60)
+    return f"{m}m{s:02d}s"
+
+
+def _progress_bar(done: int, total: int, width: int = 25) -> str:
+    if total <= 0:
+        return ""
+    filled = int(width * done / total)
+    bar = "█" * filled + "░" * (width - filled)
+    pct = 100 * done / total
+    return f"[{bar}] {pct:.0f}%"
+
 BASE_URL = "https://api-mlastatistics.mla.com.au"
 ENDPOINT = "/report/3"
 PAGE_SIZE = 100   # API returns max 100 rows per page
@@ -71,49 +87,138 @@ def _make_request(url: str, contact_email: str) -> dict:
         return json.loads(resp.read().decode("utf-8"))
 
 
-def fetch_all(from_date: str, to_date: str, categories: list[str], contact_email: str) -> list[dict]:
+def fetch_all(
+    from_date: str,
+    to_date: str,
+    categories: list[str],
+    contact_email: str,
+    progress_callback=None,
+) -> list[dict]:
     """
-    Paginate through all results with adaptive rate control (AIMD):
-      - Each successful request nudges the delay down toward DELAY_MIN.
-      - A 429 or 503 doubles the delay and retries — no crash, no fixed wait.
+    Paginate through all results with adaptive rate control (AIMD).
+    The API only accepts one category per request; when multiple categories are
+    selected this function loops through them and concatenates the results.
+
+    progress_callback(info: dict) — optional hook for UI integration.
+      info["stage"] is one of:
+        "category_start" | "page_done" | "waiting" | "rate_limited" | "complete"
+      When None, progress is printed to stdout (CLI mode).
     """
+    # API limitation: only one category per request — iterate when multiple given
+    if len(categories) > 1:
+        combined: list[dict] = []
+        for idx, cat in enumerate(categories):
+            if progress_callback:
+                progress_callback({
+                    "stage": "category_start",
+                    "category": cat,
+                    "category_index": idx + 1,
+                    "total_categories": len(categories),
+                })
+            else:
+                print(f"\n── Category {idx + 1}/{len(categories)}: {cat}", flush=True)
+            combined.extend(fetch_all(from_date, to_date, [cat], contact_email, progress_callback))
+        return combined
+
     all_rows = []
     page = 1
-    delay = DELAY_MIN  # current inter-request delay, adjusted dynamically
+    delay = DELAY_MIN
+    total = 0
+    fetch_start = time.time()
+    page_times: list[float] = []
+
+    if progress_callback is None:
+        print("  Fetching page 1 ...", flush=True)
 
     while True:
         url = build_url(from_date, to_date, categories, page)
+        t0 = time.time()
 
         while True:  # inner retry loop for throttle responses
             try:
                 payload = _make_request(url, contact_email)
-                # Success — slowly recover toward the minimum delay
                 delay = max(DELAY_MIN, delay - DELAY_STEP)
                 break
             except urllib.error.HTTPError as e:
                 if e.code in (429, 503):
                     delay = min(DELAY_MAX, delay * DELAY_MULT)
-                    print(f"  Rate limited (HTTP {e.code}) — slowing down, next delay: {delay:.1f}s")
+                    if progress_callback:
+                        progress_callback({"stage": "rate_limited", "code": e.code, "delay": delay})
+                    else:
+                        print(f"  ⚠  Rate limited (HTTP {e.code}) — backing off to {delay:.1f}s", flush=True)
                     time.sleep(delay)
                 else:
-                    print(f"  HTTP {e.code} error", file=sys.stderr)
+                    if progress_callback is None:
+                        print(f"  ✗  HTTP {e.code} error", file=sys.stderr)
                     raise
             except urllib.error.URLError as e:
-                print(f"  Network error: {e.reason}", file=sys.stderr)
+                if progress_callback is None:
+                    print(f"  ✗  Network error: {e.reason}", file=sys.stderr)
                 raise
+
+        page_elapsed = time.time() - t0
+        page_times.append(page_elapsed)
 
         rows = payload.get("data", [])
         total = payload.get("total number rows", 0)
         all_rows.extend(rows)
 
-        print(f"  Page {page}: {len(rows)} rows (total: {len(all_rows)}/{total}, delay: {delay:.1f}s)")
+        total_pages = max(page, (total + PAGE_SIZE - 1) // PAGE_SIZE) if total else page
+        elapsed = time.time() - fetch_start
+        avg_page_time = sum(page_times) / len(page_times)
+        remaining_pages = total_pages - page
+        eta_sec = remaining_pages * (avg_page_time + delay) if remaining_pages > 0 else 0
+
+        if progress_callback:
+            progress_callback({
+                "stage": "page_done",
+                "page": page,
+                "total_pages": total_pages,
+                "rows_done": len(all_rows),
+                "total_rows": total,
+                "elapsed": elapsed,
+                "eta": eta_sec,
+                "delay": delay,
+                "page_time": page_elapsed,
+            })
+        else:
+            bar = _progress_bar(len(all_rows), total) if total else ""
+            eta_str = f"  ETA {_fmt_duration(eta_sec)}" if remaining_pages > 0 else "  done"
+            print(
+                f"  Page {page}/{total_pages}  {bar}"
+                f"  {len(all_rows)}/{total} rows"
+                f"  {page_elapsed:.1f}s/page  delay={delay:.1f}s"
+                f"  elapsed={_fmt_duration(elapsed)}{eta_str}",
+                flush=True,
+            )
 
         if len(rows) < PAGE_SIZE or len(all_rows) >= total:
             break
 
         page += 1
+        if progress_callback:
+            progress_callback({"stage": "waiting", "page": page, "wait_time": delay})
+        else:
+            print(f"  Waiting {delay:.1f}s before page {page} ...", flush=True)
         time.sleep(delay)
 
+    total_elapsed = time.time() - fetch_start
+    rows_per_sec = len(all_rows) / total_elapsed if total_elapsed > 0 else 0
+
+    if progress_callback:
+        progress_callback({
+            "stage": "complete",
+            "rows_done": len(all_rows),
+            "elapsed": total_elapsed,
+            "rows_per_sec": rows_per_sec,
+            "pages": page,
+        })
+    else:
+        print(
+            f"\n  Fetch complete: {len(all_rows)} rows in {_fmt_duration(total_elapsed)}"
+            f"  ({rows_per_sec:.1f} rows/s,  {page} page(s))",
+            flush=True,
+        )
     return all_rows
 
 
@@ -168,11 +273,19 @@ def main() -> None:
             print(f"  {c}")
         return
 
+    run_start = time.time()
+
+    print("=" * 60)
     print("MLA Statistics API — /report/3 Australian Slaughter and Production")
+    print("=" * 60)
     print(f"  Date range : {args.from_date} → {args.to_date}")
-    print(f"  Categories : {args.category if args.category else 'all'}")
+    cat_display = ", ".join(args.category) if args.category else "all categories"
+    print(f"  Categories : {cat_display}")
     print(f"  Output     : {args.output}")
-    print()
+    print(f"  Contact    : {args.email}")
+    print(f"  Started at : {time.strftime('%Y-%m-%d %H:%M:%S')}")
+    print("-" * 60)
+    print("Fetching data ...", flush=True)
 
     try:
         rows = fetch_all(args.from_date, args.to_date, args.category, args.email)
@@ -180,8 +293,13 @@ def main() -> None:
         print(f"\nFailed to fetch data: {e}", file=sys.stderr)
         sys.exit(1)
 
+    print("-" * 60)
+    print(f"Writing CSV ...", flush=True)
     save_csv(rows, args.output)
 
+    total_elapsed = time.time() - run_start
+    print(f"Total runtime: {_fmt_duration(total_elapsed)}")
+    print("=" * 60)
     print("\nDisclaimer: All use of MLA data is subject to MLA's Market Report and")
     print("Information Terms of Use: https://www.mla.com.au/general/Terms-and-conditions/data-and-information/")
 
