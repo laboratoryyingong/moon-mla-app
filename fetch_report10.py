@@ -194,7 +194,7 @@ def fetch_all(
                 delay = max(DELAY_MIN, delay - DELAY_STEP)
                 break
             except urllib.error.HTTPError as e:
-                if e.code in (429, 503):
+                if e.code in (429, 502, 503, 504):
                     delay = min(DELAY_MAX, delay * DELAY_MULT)
                     if progress_callback:
                         progress_callback({"stage": "rate_limited", "code": e.code, "delay": delay})
@@ -292,7 +292,7 @@ def save_csv(rows: list[dict], output_path: str) -> None:
 
 def parse_args() -> argparse.Namespace:
     today = date.today()
-    default_to   = today.isoformat()
+    default_to   = (today - timedelta(days=1)).isoformat()
     default_from = date(today.year - 1, 1, 1).isoformat()
 
     parser = argparse.ArgumentParser(
@@ -324,6 +324,12 @@ def main() -> None:
         for s in VALID_SPECIES:
             print(f"  {s}")
         return
+
+    today = date.today().isoformat()
+    if args.to_date >= today:
+        yesterday = (date.today() - timedelta(days=1)).isoformat()
+        print(f"⚠  --to {args.to_date} includes today — capping to {yesterday} (API does not accept today's date)", flush=True)
+        args.to_date = yesterday
 
     run_start = time.time()
 

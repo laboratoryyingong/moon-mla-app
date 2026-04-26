@@ -12,7 +12,11 @@
       "Bash(curl -s 'https://api-mlastatistics.mla.com.au/report/1?fromDate=2000-01-01&toDate=2026-12-31&page=1' -H 'Accept: application/json' -H 'User-Agent: test')",
       "Bash(curl -s 'https://api-mlastatistics.mla.com.au/report/1?fromDate=2000-01-01&toDate=2026-12-31&page=2' -H 'Accept: application/json' -H 'User-Agent: test')",
       "Bash(curl -s 'https://api-mlastatistics.mla.com.au/report/1?fromDate=2000-01-01&toDate=2026-12-31&page=35' -H 'Accept: application/json' -H 'User-Agent: test')",
-      "Bash(python3 fetch_report1.py --from 2024-01-01 --to 2024-03-31 --output /tmp/test_r1.csv)"
+      "Bash(python3 fetch_report1.py --from 2024-01-01 --to 2024-03-31 --output /tmp/test_r1.csv)",
+      "Bash(curl -s 'https://api-mlastatistics.mla.com.au/report/2?year=2024&stateID=NSW&page=1' -H 'Accept: application/json' -H 'User-Agent: MLA-Data-Fetcher/1.0 \\(contact: test@example.com\\)')",
+      "Bash(curl -s 'https://api-mlastatistics.mla.com.au/report/2?year=2020&stateID=NSW&stateID=VIC&stateID=QLD&stateID=SA&stateID=WA&stateID=TAS&page=1' -H 'Accept: application/json' -H 'User-Agent: test')",
+      "Bash(curl -s 'https://api-mlastatistics.mla.com.au/report/2?year=2019&stateID=NSW&page=1' -H 'Accept: application/json' -H 'User-Agent: test')",
+      "Bash(curl -s 'https://api-mlastatistics.mla.com.au/report/2?year=2018&stateID=NSW&page=1' -H 'Accept: application/json' -H 'User-Agent: test')"
     ]
   }
 }
