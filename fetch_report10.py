@@ -1,15 +1,24 @@
 #!/usr/bin/env python3
 """
-MLA Statistics API - /report/3 Australian Slaughter and Production Fetcher
+MLA Statistics API - /report/10 NLRS Slaughter Fetcher
+
+Australian National Livestock Reporting Service (NLRS) voluntary slaughter
+survey. Reported at state × species level, released weekly on Fridays.
 
 API Terms: https://www.mla.com.au/general/Terms-and-conditions/data-and-information/
 Contact:   insights@mla.com.au
 
+Response fields:
+    result_date           — week ending date (YYYY-MM-DD)
+    contributor_state_id  — state (NSW / QLD / SA / TAS / VIC / WA)
+    species_id            — animal species
+    slaughter_count       — head count
+
 Usage:
-    python fetch_report3.py
-    python fetch_report3.py --from 2020-01-01 --to 2024-12-31
-    python fetch_report3.py --from 2023-01-01 --to 2023-12-31 --category "Cattle (Excl. Calves)" Lambs
-    python fetch_report3.py --output my_data.csv
+    python fetch_report10.py
+    python fetch_report10.py --from 2024-01-01 --to 2024-12-31
+    python fetch_report10.py --from 2024-01-01 --to 2024-12-31 --species Cattle Lambs
+    python fetch_report10.py --output my_data.csv
 """
 
 import argparse
@@ -23,6 +32,21 @@ from pathlib import Path
 import urllib.request
 import urllib.parse
 import urllib.error
+
+
+def _year_chunks(from_date: str, to_date: str) -> list[tuple[str, str]]:
+    """Split a date range into (from, to) pairs that each stay within one calendar year.
+    The API returns HTTP 500 for cross-year queries."""
+    start = date.fromisoformat(from_date)
+    end   = date.fromisoformat(to_date)
+    chunks = []
+    cur = start
+    while cur <= end:
+        year_end = date(cur.year, 12, 31)
+        chunk_end = min(year_end, end)
+        chunks.append((cur.isoformat(), chunk_end.isoformat()))
+        cur = date(cur.year + 1, 1, 1)
+    return chunks
 
 
 def _fmt_duration(seconds: float) -> str:
@@ -40,37 +64,38 @@ def _progress_bar(done: int, total: int, width: int = 25) -> str:
     pct = 100 * done / total
     return f"[{bar}] {pct:.0f}%"
 
-BASE_URL = "https://api-mlastatistics.mla.com.au"
-ENDPOINT = "/report/3"
-PAGE_SIZE = 100   # API returns max 100 rows per page
 
-# Adaptive rate limiter constants (AIMD — same principle as TCP congestion control)
-DELAY_MIN  = 1.5   # floor: fastest we'll ever go (seconds)
-DELAY_MAX  = 120.0 # ceiling: slowest we'll go after repeated throttling
-DELAY_STEP = 0.25  # additive decrease per successful request (slow recovery)
-DELAY_MULT = 2.0   # multiplicative increase on 429 (fast back-off)
+BASE_URL  = "https://api-mlastatistics.mla.com.au"
+ENDPOINT  = "/report/10"
+PAGE_SIZE = 100
 
-VALID_CATEGORIES = [
-    "Total Red Meat",
+# Adaptive rate limiter constants (AIMD)
+DELAY_MIN  = 1.5
+DELAY_MAX  = 120.0
+DELAY_STEP = 0.25
+DELAY_MULT = 2.0
+
+VALID_SPECIES = [
+    "Cattle",
     "Calves",
-    "Cattle (Excl. Calves)",
-    "Cows And Heifers",
-    "Bulls, Bullocks And Steers",
     "Sheep",
     "Lambs",
-    "Chickens",
     "Pigs",
+    "Goat",
+    "Deer",
 ]
 
+CSV_FIELDS = ["result_date", "contributor_state_id", "species_id", "slaughter_count"]
 
-def build_url(from_date: str, to_date: str, categories: list[str], page: int) -> str:
+
+def build_url(from_date: str, to_date: str, species: list[str], page: int) -> str:
     params = [
         ("fromDate", from_date),
-        ("toDate", to_date),
-        ("page", str(page)),
+        ("toDate",   to_date),
+        ("page",     str(page)),
     ]
-    for cat in categories:
-        params.append(("category", cat))
+    for s in species:
+        params.append(("species", s))
     return f"{BASE_URL}{ENDPOINT}?{urllib.parse.urlencode(params)}"
 
 
@@ -90,13 +115,13 @@ def _make_request(url: str, contact_email: str) -> dict:
 def fetch_all(
     from_date: str,
     to_date: str,
-    categories: list[str],
+    species: list[str],
     contact_email: str,
     progress_callback=None,
 ) -> list[dict]:
     """
-    Paginate through all results with adaptive rate control (AIMD).
-    The API only accepts one category per request; when multiple categories are
+    Paginate through all /report/10 results with adaptive rate control (AIMD).
+    The API only accepts one species per request; when multiple species are
     selected this function loops through them and concatenates the results.
 
     progress_callback(info: dict) — optional hook for UI integration.
@@ -104,20 +129,49 @@ def fetch_all(
         "category_start" | "page_done" | "waiting" | "rate_limited" | "complete"
       When None, progress is printed to stdout (CLI mode).
     """
-    # API limitation: only one category per request — iterate when multiple given
-    if len(categories) > 1:
+    # API limitation: cross-year queries return HTTP 500 — split by calendar year
+    chunks = _year_chunks(from_date, to_date)
+    if len(chunks) > 1:
         combined: list[dict] = []
-        for idx, cat in enumerate(categories):
+        for idx, (chunk_from, chunk_to) in enumerate(chunks):
             if progress_callback:
                 progress_callback({
                     "stage": "category_start",
-                    "category": cat,
+                    "kind": "year",
+                    "category": str(chunk_from[:4]),
                     "category_index": idx + 1,
-                    "total_categories": len(categories),
+                    "total_categories": len(chunks),
                 })
             else:
-                print(f"\n── Category {idx + 1}/{len(categories)}: {cat}", flush=True)
-            combined.extend(fetch_all(from_date, to_date, [cat], contact_email, progress_callback))
+                print(f"\n── Year chunk {idx + 1}/{len(chunks)}: {chunk_from} → {chunk_to}", flush=True)
+            try:
+                combined.extend(fetch_all(chunk_from, chunk_to, species, contact_email, progress_callback))
+            except urllib.error.HTTPError as e:
+                if e.code == 500:
+                    msg = f"No data for {chunk_from[:4]} (HTTP 500) — skipping"
+                    if progress_callback:
+                        progress_callback({"stage": "warning", "message": msg})
+                    else:
+                        print(f"  ⚠  {msg}", flush=True)
+                else:
+                    raise
+        return combined
+
+    # API limitation: only one species per request — iterate when multiple given
+    if len(species) > 1:
+        combined: list[dict] = []
+        for idx, sp in enumerate(species):
+            if progress_callback:
+                progress_callback({
+                    "stage": "category_start",
+                    "kind": "species",
+                    "category": sp,
+                    "category_index": idx + 1,
+                    "total_categories": len(species),
+                })
+            else:
+                print(f"\n── Species {idx + 1}/{len(species)}: {sp}", flush=True)
+            combined.extend(fetch_all(from_date, to_date, [sp], contact_email, progress_callback))
         return combined
 
     all_rows = []
@@ -131,10 +185,10 @@ def fetch_all(
         print("  Fetching page 1 ...", flush=True)
 
     while True:
-        url = build_url(from_date, to_date, categories, page)
+        url = build_url(from_date, to_date, species, page)
         t0 = time.time()
 
-        while True:  # inner retry loop for throttle responses
+        while True:
             try:
                 payload = _make_request(url, contact_email)
                 delay = max(DELAY_MIN, delay - DELAY_STEP)
@@ -227,11 +281,9 @@ def save_csv(rows: list[dict], output_path: str) -> None:
         print("No data to save.")
         return
 
-    fieldnames = ["report_date", "report_type", "category", "location_id", "unit_of_measure", "value_amt"]
     path = Path(output_path)
-
     with path.open("w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=fieldnames, extrasaction="ignore")
+        writer = csv.DictWriter(f, fieldnames=CSV_FIELDS, extrasaction="ignore")
         writer.writeheader()
         writer.writerows(rows)
 
@@ -240,47 +292,47 @@ def save_csv(rows: list[dict], output_path: str) -> None:
 
 def parse_args() -> argparse.Namespace:
     today = date.today()
-    default_to = today.isoformat()
-    default_from = date(today.year - 5, 1, 1).isoformat()
+    default_to   = today.isoformat()
+    default_from = date(today.year - 1, 1, 1).isoformat()
 
     parser = argparse.ArgumentParser(
-        description="Fetch MLA /report/3 Australian Slaughter and Production data"
+        description="Fetch MLA /report/10 NLRS Australian Slaughter data"
     )
     parser.add_argument("--from", dest="from_date", default=default_from,
                         metavar="YYYY-MM-DD", help=f"Start date (default: {default_from})")
     parser.add_argument("--to", dest="to_date", default=default_to,
                         metavar="YYYY-MM-DD", help=f"End date (default: {default_to})")
-    parser.add_argument("--category", nargs="+", choices=VALID_CATEGORIES, default=[],
-                        metavar="CATEGORY",
-                        help="Filter by category (default: all). Choices:\n" +
-                             "\n".join(f"  {c}" for c in VALID_CATEGORIES))
-    parser.add_argument("--output", default="report3_slaughter_production.csv",
-                        help="Output CSV file (default: report3_slaughter_production.csv)")
-    parser.add_argument("--list-categories", action="store_true",
-                        help="Print valid category names and exit")
+    parser.add_argument("--species", nargs="+", choices=VALID_SPECIES, default=[],
+                        metavar="SPECIES",
+                        help="Filter by species (default: all). Choices:\n" +
+                             "\n".join(f"  {s}" for s in VALID_SPECIES))
+    parser.add_argument("--output", default="report10_nlrs_slaughter.csv",
+                        help="Output CSV file (default: report10_nlrs_slaughter.csv)")
+    parser.add_argument("--list-species", action="store_true",
+                        help="Print valid species names and exit")
     parser.add_argument("--email", default="moon.zhou@thomasfoods.com",
                         metavar="EMAIL",
-                        help="Your contact email, included in the User-Agent header (default: moon.zhou@thomasfoods.com)")
+                        help="Your contact email, included in the User-Agent header")
     return parser.parse_args()
 
 
 def main() -> None:
     args = parse_args()
 
-    if args.list_categories:
-        print("Valid categories for /report/3:")
-        for c in VALID_CATEGORIES:
-            print(f"  {c}")
+    if args.list_species:
+        print("Valid species for /report/10:")
+        for s in VALID_SPECIES:
+            print(f"  {s}")
         return
 
     run_start = time.time()
 
     print("=" * 60)
-    print("MLA Statistics API — /report/3 Australian Slaughter and Production")
+    print("MLA Statistics API — /report/10 NLRS Australian Slaughter")
     print("=" * 60)
     print(f"  Date range : {args.from_date} → {args.to_date}")
-    cat_display = ", ".join(args.category) if args.category else "all categories"
-    print(f"  Categories : {cat_display}")
+    sp_display = ", ".join(args.species) if args.species else "all species"
+    print(f"  Species    : {sp_display}")
     print(f"  Output     : {args.output}")
     print(f"  Contact    : {args.email}")
     print(f"  Started at : {time.strftime('%Y-%m-%d %H:%M:%S')}")
@@ -288,13 +340,13 @@ def main() -> None:
     print("Fetching data ...", flush=True)
 
     try:
-        rows = fetch_all(args.from_date, args.to_date, args.category, args.email)
+        rows = fetch_all(args.from_date, args.to_date, args.species, args.email)
     except (urllib.error.HTTPError, urllib.error.URLError, RuntimeError) as e:
         print(f"\nFailed to fetch data: {e}", file=sys.stderr)
         sys.exit(1)
 
     print("-" * 60)
-    print(f"Writing CSV ...", flush=True)
+    print("Writing CSV ...", flush=True)
     save_csv(rows, args.output)
 
     total_elapsed = time.time() - run_start

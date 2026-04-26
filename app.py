@@ -1,18 +1,18 @@
 #!/usr/bin/env python3
 """
-MLA Report 3 — Local Streamlit App
+MLA Report 10 — Local Streamlit App
 Run with:  streamlit run app.py
 """
 
 import base64
-import io
+import time as _time
 from datetime import date
 from pathlib import Path
 
 import pandas as pd
 import streamlit as st
 
-from fetch_report3 import VALID_CATEGORIES, _fmt_duration, _progress_bar, fetch_all
+from fetch_report10 import VALID_SPECIES, _fmt_duration, _progress_bar, fetch_all
 
 
 def _svg_logo(path: str, width: int = 220) -> None:
@@ -24,14 +24,14 @@ def _svg_logo(path: str, width: int = 220) -> None:
     )
 
 st.set_page_config(
-    page_title="Thomas Food MLA Query Tools",
+    page_title="Thomas Food MLA Query Tools — NLRS Slaughter",
     page_icon="🥩",
     layout="centered",
 )
 
 _svg_logo("TFI-Logo-Positive.svg", width=220)
 st.title("MLA Query Tools")
-st.subheader("Australian Slaughter & Production Data")
+st.subheader("NLRS Australian Slaughter Data — /report/10")
 st.caption(
     "Data sourced from the [MLA Statistics API](https://api-mlastatistics.mla.com.au). "
     "Use subject to [MLA Terms of Use](https://www.mla.com.au/general/Terms-and-conditions/data-and-information/)."
@@ -41,19 +41,19 @@ st.divider()
 
 # ── Input form ────────────────────────────────────────────────────────────────
 today = date.today()
-default_from = date(today.year - 5, 1, 1)
+default_from = date(today.year - 1, 1, 1)
 
 col1, col2 = st.columns(2)
 with col1:
-    from_date = st.date_input("From date", value=default_from, max_value=today)
+    from_date = st.date_input("From date", value=default_from, max_value=today, format="DD/MM/YYYY")
 with col2:
-    to_date = st.date_input("To date", value=today, max_value=today)
+    to_date = st.date_input("To date", value=today, max_value=today, format="DD/MM/YYYY")
 
-categories = st.multiselect(
-    "Categories",
-    options=VALID_CATEGORIES,
+species = st.multiselect(
+    "Species",
+    options=VALID_SPECIES,
     default=[],
-    placeholder="Leave empty to fetch all categories",
+    placeholder="Leave empty to fetch all species",
 )
 
 with st.expander("Advanced settings"):
@@ -79,11 +79,10 @@ if fetch_btn:
     log_area = st.empty()
     log_lines: list[str] = []
 
-    import time as _time
-    cat_display = ", ".join(categories) if categories else "all categories"
+    sp_display = ", ".join(species) if species else "all species"
     log_lines.append(f"[{_time.strftime('%H:%M:%S')}] Starting fetch")
     log_lines.append(f"[{_time.strftime('%H:%M:%S')}] Date range : {from_date} → {to_date}")
-    log_lines.append(f"[{_time.strftime('%H:%M:%S')}] Categories : {cat_display}")
+    log_lines.append(f"[{_time.strftime('%H:%M:%S')}] Species    : {sp_display}")
     log_area.code("\n".join(log_lines), language=None)
 
     def on_progress(info: dict) -> None:
@@ -91,8 +90,9 @@ if fetch_btn:
         ts = _time.strftime("%H:%M:%S")
 
         if stage == "category_start":
+            kind_label = "Year" if info.get("kind") == "year" else "Species"
             log_lines.append(
-                f"[{ts}] ── Category {info['category_index']}/{info['total_categories']}: {info['category']}"
+                f"[{ts}] ── {kind_label} {info['category_index']}/{info['total_categories']}: {info['category']}"
             )
             log_area.code("\n".join(log_lines), language=None)
 
@@ -120,6 +120,9 @@ if fetch_btn:
         elif stage == "waiting":
             log_lines.append(f"[{ts}] Waiting {info['wait_time']:.1f}s before page {info['page']} ...")
 
+        elif stage == "warning":
+            log_lines.append(f"[{ts}] ⚠  {info['message']}")
+
         elif stage == "rate_limited":
             log_lines.append(f"[{ts}] ⚠  Rate limited (HTTP {info['code']}) — backing off to {info['delay']:.1f}s")
 
@@ -138,7 +141,7 @@ if fetch_btn:
         rows = fetch_all(
             from_date.isoformat(),
             to_date.isoformat(),
-            categories,
+            species,
             email,
             progress_callback=on_progress,
         )
@@ -165,34 +168,34 @@ if "df" in st.session_state:
     # Summary metrics
     m1, m2, m3 = st.columns(3)
     m1.metric("Total rows", f"{len(df):,}")
-    if "category" in df.columns:
-        m2.metric("Categories", df["category"].nunique())
-    if "report_date" in df.columns:
+    if "species_id" in df.columns:
+        m2.metric("Species", df["species_id"].nunique())
+    if "result_date" in df.columns:
         with m3:
             st.markdown("**Date range**")
-            st.write(f"{df['report_date'].min()}  →  {df['report_date'].max()}")
+            st.write(f"{df['result_date'].min()}  →  {df['result_date'].max()}")
 
-    # Category breakdown chart
-    if "category" in df.columns and "value_amt" in df.columns:
+    # Species breakdown chart
+    if "species_id" in df.columns and "slaughter_count" in df.columns:
         import altair as alt
-        with st.expander("Category breakdown", expanded=True):
+        with st.expander("Species breakdown", expanded=True):
             chart_df = (
-                df.assign(value_amt=pd.to_numeric(df["value_amt"], errors="coerce"))
-                .groupby("category")["value_amt"]
+                df.assign(slaughter_count=pd.to_numeric(df["slaughter_count"], errors="coerce"))
+                .groupby("species_id")["slaughter_count"]
                 .sum()
                 .reset_index()
-                .rename(columns={"value_amt": "Total value", "category": "Category"})
-                .sort_values("Total value", ascending=False)
+                .rename(columns={"slaughter_count": "Total slaughter", "species_id": "Species"})
+                .sort_values("Total slaughter", ascending=False)
             )
             chart = (
                 alt.Chart(chart_df)
                 .mark_bar()
                 .encode(
-                    y=alt.Y("Category:N", sort="-x", title=None),
-                    x=alt.X("Total value:Q", axis=alt.Axis(format=",.2f"), title="Total value"),
+                    y=alt.Y("Species:N", sort="-x", title=None),
+                    x=alt.X("Total slaughter:Q", axis=alt.Axis(format=",.0f"), title="Total slaughter (head)"),
                     tooltip=[
-                        alt.Tooltip("Category:N"),
-                        alt.Tooltip("Total value:Q", format=",.2f"),
+                        alt.Tooltip("Species:N"),
+                        alt.Tooltip("Total slaughter:Q", format=",.0f"),
                     ],
                 )
                 .properties(height=max(200, len(chart_df) * 60), padding={"left": 10, "right": 10, "top": 20, "bottom": 20})
@@ -203,17 +206,12 @@ if "df" in st.session_state:
     st.dataframe(df, use_container_width=True, hide_index=True)
 
     # Download
-    export_cols = [
-        c for c in
-        ["report_date", "report_type", "category", "location_id", "unit_of_measure", "value_amt"]
-        if c in df.columns
-    ]
-    csv_bytes = df[export_cols].to_csv(index=False).encode("utf-8")
+    csv_bytes = df[["result_date", "contributor_state_id", "species_id", "slaughter_count"]].to_csv(index=False).encode("utf-8")
 
     st.download_button(
         label="Download CSV",
         data=csv_bytes,
-        file_name="report3_slaughter_production.csv",
+        file_name="report10_nlrs_slaughter.csv",
         mime="text/csv",
         use_container_width=True,
     )
