@@ -1,0 +1,19 @@
+indicator_id,price_col,heads_col,indicator_desc,indicator_units,applies_to
+1,ind_1_price_avg,ind_1_heads_avg,Western Young Cattle Indicator,c/kg cwt,Cattle
+2,ind_2_price_avg,ind_2_heads_avg,National Restocker Yearling Steer Indicator,c/kg lwt,Cattle
+3,ind_3_price_avg,ind_3_heads_avg,National Feeder Steer Indicator,c/kg lwt,Cattle
+4,ind_4_price_avg,ind_4_heads_avg,National Heavy Steer Indicator,c/kg lwt,Cattle
+5,ind_5_price_avg,ind_5_heads_avg,National Heavy Dairy Cow Indicator,c/kg lwt,Cattle
+6,ind_6_price_avg,ind_6_heads_avg,National Light Lamb Indicator,c/kg cwt,Lambs
+7,ind_7_price_avg,ind_7_heads_avg,National Trade Lamb Indicator,c/kg cwt,Lambs
+8,ind_8_price_avg,ind_8_heads_avg,National Heavy Lamb Indicator,c/kg cwt,Lambs
+9,ind_9_price_avg,ind_9_heads_avg,National Merino Lamb Indicator,c/kg cwt,Lambs
+10,ind_10_price_avg,ind_10_heads_avg,National Restocker Lamb Indicator,c/kg cwt,Lambs
+11,ind_11_price_avg,ind_11_heads_avg,National Mutton Indicator,c/kg cwt,Sheep
+12,ind_12_price_avg,ind_12_heads_avg,National Restocker Yearling Heifer Indicator,c/kg lwt,Cattle
+13,ind_13_price_avg,ind_13_heads_avg,National Processor Cow Indicator,c/kg lwt,Cattle
+14,ind_14_price_avg,ind_14_heads_avg,National Young Cattle Indicator,c/kg lwt,Cattle
+15,ind_15_price_avg,ind_15_heads_avg,Online Young Cattle Indicator,c/kg lwt,Cattle
+16,ind_16_price_avg,ind_16_heads_avg,Online Lamb Indicator,$/head,Lambs
+17,ind_17_price_avg,ind_17_heads_avg,National Feeder Heifer Indicator,c/kg lwt,Cattle
+18,ind_18_price_avg,ind_18_heads_avg,Online Sheep Indicator,$/head,Sheep

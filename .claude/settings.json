@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -c ' *)",
+      "Bash(git -C /Users/yingong/Desktop/moon-mla-app log --oneline)",
+      "Bash(git -C /Users/yingong/Desktop/moon-mla-app diff HEAD~1 HEAD --name-status)",
+      "Bash(git -C /Users/yingong/Desktop/moon-mla-app show 01f578c --stat)",
+      "Bash(curl -s 'https://api-mlastatistics.mla.com.au/report/1?page=1' -H 'Accept: application/json' -H 'User-Agent: MLA-Data-Fetcher/1.0 \\(contact: test@example.com\\)')",
+      "Bash(curl -s 'https://api-mlastatistics.mla.com.au/report/1?fromDate=2024-01-01&toDate=2024-03-01&page=1' -H 'Accept: application/json' -H 'User-Agent: MLA-Data-Fetcher/1.0 \\(contact: test@example.com\\)')",
+      "Bash(curl -s 'https://api-mlastatistics.mla.com.au/report/1?fromDate=2020-01-01&toDate=2025-12-31&page=1' -H 'Accept: application/json' -H 'User-Agent: MLA-Data-Fetcher/1.0 \\(contact: test@example.com\\)')",
+      "Bash(curl -o /dev/null -s -w '%{http_code}\\\\n' 'https://api-mlastatistics.mla.com.au/report/1?fromDate=2023-01-01&toDate=2024-12-31&page=1' -H 'Accept: application/json' -H 'User-Agent: test')",
+      "Bash(curl -s 'https://api-mlastatistics.mla.com.au/report/1?fromDate=2000-01-01&toDate=2026-12-31&page=1' -H 'Accept: application/json' -H 'User-Agent: test')",
+      "Bash(curl -s 'https://api-mlastatistics.mla.com.au/report/1?fromDate=2000-01-01&toDate=2026-12-31&page=2' -H 'Accept: application/json' -H 'User-Agent: test')",
+      "Bash(curl -s 'https://api-mlastatistics.mla.com.au/report/1?fromDate=2000-01-01&toDate=2026-12-31&page=35' -H 'Accept: application/json' -H 'User-Agent: test')",
+      "Bash(python3 fetch_report1.py --from 2024-01-01 --to 2024-03-31 --output /tmp/test_r1.csv)"
+    ]
+  }
+}
