@@ -1,35 +1,37 @@
 #!/usr/bin/env python3
 """
-MLA Statistics API - /report/7 Global Cattle Prices Fetcher
+MLA Statistics API - /report/9 US Imported Meat Prices Fetcher
 
-Global livestock price indicators sourced from:
-  - Australia (AUS): National Livestock Reporting Service (NLRS), updated daily at 12am AEST
-  - USA: US Steiner Consulting indicators, updated weekly (Tuesday)
+US Imported Meat Prices sourced from US Steiner Consulting.
+Data is updated weekly (Tuesday).
 
 API Terms: https://www.mla.com.au/general/Terms-and-conditions/data-and-information/
 Contact:   insights@mla.com.au
 
 Response fields:
+    indicator_name   — price indicator name
     indicator_date   — date (YYYY-MM-DD)
-    species_id       — animal species (e.g. "Cattle")
-    country_code     — AUS | USA
-    indicator_desc   — indicator name
-    indicator_units  — unit of measure (e.g. c/kg lwt, $/cwt)
+    indicator_units  — unit of measure (e.g. "US c/lb")
     indicator_value  — price value
-    currency_code    — AUD | USD
 
-Available country IDs:
-    AUS  — NLRS indicators (daily). Multiple cattle price indicators.
-    USA  — US Steiner Consulting (weekly, Tuesday):
-             Fed Steer, 5-Day Average
-             CME Feeder Cattle Index
+Indicators available:
+    Cap Off Insides
+    85CL Trim
+    85CL Cow Fores
+    90CL Boneless Beef, NZ
+    90CL Boneless Beef, NZ/Australia
+    90CL Shank
+    80CL Trim
+    Steer Knuckles
+    95CL Bull Meat, West Coast
+    75CL Trim
+    95CL Bull Meat, East Coast
+    Steer Flats
 
 Usage:
-    python fetch_report7.py
-    python fetch_report7.py --from 2024-01-01 --to 2024-12-31
-    python fetch_report7.py --countries AUS
-    python fetch_report7.py --countries USA
-    python fetch_report7.py --output my_global_prices.csv
+    python fetchers/fetch_report9.py
+    python fetchers/fetch_report9.py --from 2024-01-01 --to 2024-12-31
+    python fetchers/fetch_report9.py --output my_us_imported_prices.csv
 """
 
 import argparse
@@ -37,12 +39,12 @@ import csv
 import json
 import sys
 import time
-from datetime import date, timedelta
+from datetime import date
 from pathlib import Path
 
-import urllib.request
-import urllib.parse
 import urllib.error
+import urllib.parse
+import urllib.request
 
 
 def _fmt_duration(seconds: float) -> str:
@@ -61,34 +63,26 @@ def _progress_bar(done: int, total: int, width: int = 25) -> str:
     return f"[{bar}] {pct:.0f}%"
 
 
-BASE_URL  = "https://api-mlastatistics.mla.com.au"
-ENDPOINT  = "/report/7"
+BASE_URL = "https://api-mlastatistics.mla.com.au"
+ENDPOINT = "/report/9"
 PAGE_SIZE = 100
 
-DELAY_MIN  = 1.5
-DELAY_MAX  = 120.0
+REPO_ROOT      = Path(__file__).resolve().parents[1]
+DEFAULT_OUTPUT = REPO_ROOT / "data" / "raw" / "report9_us_imported_meat_prices.csv"
+
+DELAY_MIN = 1.5
+DELAY_MAX = 120.0
 DELAY_STEP = 0.25
 DELAY_MULT = 2.0
 
-VALID_COUNTRIES = ["AUS", "USA"]
-
-CSV_FIELDS = [
-    "indicator_date",
-    "species_id",
-    "country_code",
-    "indicator_desc",
-    "indicator_units",
-    "indicator_value",
-    "currency_code",
-]
+CSV_FIELDS = ["indicator_name", "indicator_date", "indicator_units", "indicator_value"]
 
 
-def build_url(from_date: str, to_date: str, country_id: str, page: int) -> str:
+def build_url(from_date: str, to_date: str, page: int) -> str:
     params = [
-        ("fromDate",  from_date),
-        ("toDate",    to_date),
-        ("countryID", country_id),
-        ("page",      str(page)),
+        ("fromDate", from_date),
+        ("toDate", to_date),
+        ("page", str(page)),
     ]
     return f"{BASE_URL}{ENDPOINT}?{urllib.parse.urlencode(params)}"
 
@@ -105,25 +99,29 @@ def _make_request(url: str, contact_email: str) -> dict:
         return json.loads(resp.read().decode("utf-8"))
 
 
-def _fetch_one(
+def fetch_all(
     from_date: str,
     to_date: str,
-    country_id: str,
     contact_email: str,
-    progress_callback,
+    progress_callback=None,
 ) -> list[dict]:
-    """Paginate through all results for a single country."""
+    """
+    Paginate through all /report/9 results with adaptive rate control (AIMD).
+    No category iteration or cross-year chunking required for this endpoint.
+
+    progress_callback(info: dict) — optional hook for UI integration.
+      info["stage"] is one of:
+        "page_done" | "waiting" | "rate_limited" | "complete"
+      When None, progress is printed to stdout (CLI mode).
+    """
     all_rows = []
     page = 1
     delay = DELAY_MIN
     fetch_start = time.time()
     page_times: list[float] = []
 
-    if progress_callback is None:
-        print(f"  Fetching {country_id} ...", flush=True)
-
     while True:
-        url = build_url(from_date, to_date, country_id, page)
+        url = build_url(from_date, to_date, page)
         t0 = time.time()
 
         while True:
@@ -194,61 +192,25 @@ def _fetch_one(
             print(f"  Waiting {delay:.1f}s before page {page} ...", flush=True)
         time.sleep(delay)
 
-    return all_rows
-
-
-def fetch_all(
-    from_date: str,
-    to_date: str,
-    countries: list[str],
-    contact_email: str,
-    progress_callback=None,
-) -> list[dict]:
-    """
-    Paginate through all /report/7 results with adaptive rate control (AIMD).
-    The API requires one countryID per request; this function iterates over each
-    country and concatenates the results.
-    No cross-year chunking needed — the API handles cross-year ranges correctly.
-
-    progress_callback(info: dict) — optional hook for UI integration.
-      info["stage"] is one of:
-        "category_start" | "page_done" | "waiting" | "rate_limited" | "complete"
-      When None, progress is printed to stdout (CLI mode).
-    """
-    fetch_start = time.time()
-    combined: list[dict] = []
-
-    for idx, country in enumerate(countries):
-        if progress_callback:
-            progress_callback({
-                "stage": "category_start",
-                "kind": "country",
-                "category": country,
-                "category_index": idx + 1,
-                "total_categories": len(countries),
-            })
-        else:
-            print(f"\n── Country {idx + 1}/{len(countries)}: {country}", flush=True)
-        combined.extend(_fetch_one(from_date, to_date, country, contact_email, progress_callback))
-
     total_elapsed = time.time() - fetch_start
-    rows_per_sec = len(combined) / total_elapsed if total_elapsed > 0 else 0
+    rows_per_sec = len(all_rows) / total_elapsed if total_elapsed > 0 else 0
 
     if progress_callback:
         progress_callback({
             "stage": "complete",
-            "rows_done": len(combined),
+            "rows_done": len(all_rows),
             "elapsed": total_elapsed,
             "rows_per_sec": rows_per_sec,
+            "pages": page,
         })
     else:
         print(
-            f"\n  Fetch complete: {len(combined)} rows in {_fmt_duration(total_elapsed)}"
-            f"  ({rows_per_sec:.1f} rows/s)",
+            f"\n  Fetch complete: {len(all_rows)} rows in {_fmt_duration(total_elapsed)}"
+            f"  ({rows_per_sec:.1f} rows/s,  {page} page(s))",
             flush=True,
         )
 
-    return combined
+    return all_rows
 
 
 def save_csv(rows: list[dict], output_path: str) -> None:
@@ -257,6 +219,7 @@ def save_csv(rows: list[dict], output_path: str) -> None:
         return
 
     path = Path(output_path)
+    path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=CSV_FIELDS, extrasaction="ignore")
         writer.writeheader()
@@ -267,23 +230,18 @@ def save_csv(rows: list[dict], output_path: str) -> None:
 
 def parse_args() -> argparse.Namespace:
     today = date.today()
-    default_to   = (today - timedelta(days=1)).isoformat()
+    default_to = today.isoformat()
     default_from = date(today.year - 1, 1, 1).isoformat()
 
     parser = argparse.ArgumentParser(
-        description="Fetch MLA /report/7 Global Cattle Prices data"
+        description="Fetch MLA /report/9 US Imported Meat Prices data"
     )
     parser.add_argument("--from", dest="from_date", default=default_from,
                         metavar="YYYY-MM-DD", help=f"Start date (default: {default_from})")
     parser.add_argument("--to", dest="to_date", default=default_to,
                         metavar="YYYY-MM-DD", help=f"End date (default: {default_to})")
-    parser.add_argument("--countries", nargs="+", choices=VALID_COUNTRIES, default=VALID_COUNTRIES,
-                        metavar="COUNTRY",
-                        help="Country IDs to fetch (default: all). Choices: " + " ".join(VALID_COUNTRIES))
-    parser.add_argument("--output", default="report7_global_cattle_prices.csv",
-                        help="Output CSV file (default: report7_global_cattle_prices.csv)")
-    parser.add_argument("--list-countries", action="store_true",
-                        help="Print valid country IDs and exit")
+    parser.add_argument("--output", default=str(DEFAULT_OUTPUT),
+                        help="Output CSV file (default: data/raw/report9_us_imported_meat_prices.csv)")
     parser.add_argument("--email", default="moon.zhou@thomasfoods.com",
                         metavar="EMAIL",
                         help="Your contact email, included in the User-Agent header")
@@ -293,19 +251,12 @@ def parse_args() -> argparse.Namespace:
 def main() -> None:
     args = parse_args()
 
-    if args.list_countries:
-        print("Valid countryIDs for /report/7:")
-        print("  AUS  — NLRS indicators (daily at 12am AEST)")
-        print("  USA  — US Steiner Consulting indicators (weekly, Tuesday)")
-        return
-
     run_start = time.time()
 
     print("=" * 60)
-    print("MLA Statistics API — /report/7 Global Cattle Prices")
+    print("MLA Statistics API — /report/9 US Imported Meat Prices")
     print("=" * 60)
     print(f"  Date range : {args.from_date} → {args.to_date}")
-    print(f"  Countries  : {', '.join(args.countries)}")
     print(f"  Output     : {args.output}")
     print(f"  Contact    : {args.email}")
     print(f"  Started at : {time.strftime('%Y-%m-%d %H:%M:%S')}")
@@ -313,7 +264,7 @@ def main() -> None:
     print("Fetching data ...", flush=True)
 
     try:
-        rows = fetch_all(args.from_date, args.to_date, args.countries, args.email)
+        rows = fetch_all(args.from_date, args.to_date, args.email)
     except (urllib.error.HTTPError, urllib.error.URLError, RuntimeError) as e:
         print(f"\nFailed to fetch data: {e}", file=sys.stderr)
         sys.exit(1)

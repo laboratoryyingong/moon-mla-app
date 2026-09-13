@@ -12,7 +12,7 @@ from pathlib import Path
 import pandas as pd
 import streamlit as st
 
-from fetch_report10 import VALID_SPECIES, _fmt_duration, _progress_bar, fetch_all
+from fetchers.fetch_report10 import VALID_SPECIES, _fmt_duration, _progress_bar, fetch_all
 
 
 def _svg_logo(path: str, width: int = 220) -> None:
@@ -29,7 +29,9 @@ st.set_page_config(
     layout="centered",
 )
 
-_svg_logo("TFI-Logo-Positive.svg", width=220)
+ASSETS_DIR = Path(__file__).resolve().parent / "assets"
+
+_svg_logo(str(ASSETS_DIR / "TFI-Logo-Positive.svg"), width=220)
 st.title("MLA Query Tools")
 st.subheader("NLRS Australian Slaughter Data — /report/10")
 st.caption(

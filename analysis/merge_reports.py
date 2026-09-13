@@ -4,8 +4,8 @@ Merge /report/5 (price indicators) + /report/10 (slaughter counts) into one anal
 
 Output
 ------
-merged_weekly.csv       — main wide table, one row per (week_ending × species_group)
-indicator_lookup.csv    — column legend: indicator_id → desc, units, species_group
+data/processed/merged_weekly.csv       — main wide table, one row per (week_ending × species_group)
+data/processed/indicator_lookup.csv    — column legend: indicator_id → desc, units, species_group
 
 Column layout of merged_weekly.csv
 -----------------------------------
@@ -28,8 +28,8 @@ Species → indicator mapping
 
 Usage
 -----
-    python merge_reports.py
-    python merge_reports.py --r5 my_r5.csv --r10 my_r10.csv --output custom.csv
+    python analysis/merge_reports.py
+    python analysis/merge_reports.py --r5 my_r5.csv --r10 my_r10.csv --output custom.csv
 """
 
 import argparse
@@ -228,12 +228,17 @@ def indicator_lookup() -> pd.DataFrame:
 # CLI
 # ---------------------------------------------------------------------------
 
+REPO_ROOT = Path(__file__).resolve().parents[1]
+RAW_DIR   = REPO_ROOT / "data" / "raw"
+PROC_DIR  = REPO_ROOT / "data" / "processed"
+
+
 def parse_args():
     p = argparse.ArgumentParser(description="Merge report/5 + report/10 into a weekly analysis table")
-    p.add_argument("--r5",     default="report5_livestock_indicators.csv")
-    p.add_argument("--r10",    default="report10_nlrs_slaughter.csv")
-    p.add_argument("--output", default="merged_weekly.csv")
-    p.add_argument("--lookup", default="indicator_lookup.csv")
+    p.add_argument("--r5",     default=str(RAW_DIR / "report5_livestock_indicators.csv"))
+    p.add_argument("--r10",    default=str(RAW_DIR / "report10_nlrs_slaughter.csv"))
+    p.add_argument("--output", default=str(PROC_DIR / "merged_weekly.csv"))
+    p.add_argument("--lookup", default=str(PROC_DIR / "indicator_lookup.csv"))
     return p.parse_args()
 
 
@@ -245,11 +250,13 @@ def main():
     df = merge(args.r5, args.r10)
 
     out = Path(args.output)
+    out.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(out, index=False)
     print(f"Saved {len(df):,} rows → {out.resolve()}")
     print(f"Columns ({len(df.columns)}): {list(df.columns)}")
 
     lk = indicator_lookup()
+    Path(args.lookup).parent.mkdir(parents=True, exist_ok=True)
     lk.to_csv(args.lookup, index=False)
     print(f"Saved indicator lookup → {Path(args.lookup).resolve()}")
 

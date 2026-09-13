@@ -1,0 +1,229 @@
+financial_year,region_desc,subcategory_desc,metric_desc,estimate_value
+2018-19,NSW,Dairy cattle,Cows in milk and dry,148550.0000
+2018-19,NSW,Meat cattle,Calves less than 1 year,955548.0600
+2018-19,NSW,Sheep and lambs - Lambs under 1 year,Total,6042331.0000
+2018-19,NSW,Dairy cattle,All other dairy cattle n.e.c.,5439.2000
+2018-19,NSW,Meat cattle,Total,3780345.7800
+2018-19,NSW,Sheep and lambs,Total,22366416.2500
+2018-19,NSW,Meat cattle,Cows and heifers 1 year and over,1864993.5700
+2018-19,NSW,Cattle,Total cattle,4043055.4000
+2018-19,NSW,Dairy cattle,Total,262709.6100
+2018-19,NSW,Meat cattle,All other meat cattle,959804.1500
+2018-19,NSW,Sheep and lambs,All other,2640173.7000
+2018-19,SA,Meat cattle,Cows and heifers 1 year and over,427068.2800
+2018-19,SA,Meat cattle,Total,880717.1300
+2018-19,SA,Sheep and lambs - Lambs under 1 year,Total,3685240.3800
+2018-19,SA,Sheep and lambs,Total,10649696.2400
+2018-19,SA,Dairy cattle,Cows in milk and dry,56657.0000
+2018-19,SA,Dairy cattle,Total,100314.7600
+2018-19,SA,Meat cattle,Calves less than 1 year,263858.9300
+2018-19,SA,Cattle,Total cattle,981031.8900
+2018-19,SA,Meat cattle,All other meat cattle,189789.9200
+2018-19,SA,Dairy cattle,All other dairy cattle n.e.c.,5345.0800
+2018-19,SA,Sheep and lambs,All other,967693.9900
+2018-19,VIC,Dairy cattle,Total,1496955.7600
+2018-19,VIC,Meat cattle,Calves less than 1 year,646793.0300
+2018-19,VIC,Dairy cattle,Cows in milk and dry,898256.0000
+2018-19,VIC,Dairy cattle,All other dairy cattle n.e.c.,59134.0300
+2018-19,VIC,Sheep and lambs,All other,1934944.6900
+2018-19,VIC,Meat cattle,Total,2106238.0900
+2018-19,VIC,Meat cattle,All other meat cattle,460339.7600
+2018-19,VIC,Sheep and lambs - Lambs under 1 year,Total,4176552.2900
+2018-19,VIC,Cattle,Total cattle,3603193.8400
+2018-19,VIC,Sheep and lambs,Total,13948270.0600
+2018-19,VIC,Meat cattle,Cows and heifers 1 year and over,999105.3000
+2018-19,QLD,Cattle,Total cattle,11295125.0100
+2018-19,QLD,Sheep and lambs,All other,544707.3900
+2018-19,QLD,Meat cattle,All other meat cattle,3234666.6600
+2018-19,QLD,Meat cattle,Cows and heifers 1 year and over,5743951.1400
+2018-19,QLD,Sheep and lambs,Total,2100694.9200
+2018-19,QLD,Dairy cattle,Total,138837.9600
+2018-19,QLD,Dairy cattle,All other dairy cattle n.e.c.,4057.8300
+2018-19,QLD,Dairy cattle,Cows in milk and dry,78248.0000
+2018-19,QLD,Meat cattle,Calves less than 1 year,2177669.2500
+2018-19,QLD,Sheep and lambs - Lambs under 1 year,Total,398431.4500
+2018-19,QLD,Meat cattle,Total,11156287.0500
+2018-19,WA,Sheep and lambs,Total,14305148.4800
+2018-19,WA,Meat cattle,Cows and heifers 1 year and over,1068170.1400
+2018-19,WA,Sheep and lambs,All other,2073406.1500
+2018-19,WA,Dairy cattle,Total,111349.8300
+2018-19,WA,Meat cattle,All other meat cattle,342587.8200
+2018-19,WA,Dairy cattle,Cows in milk and dry,56004.0000
+2018-19,WA,Sheep and lambs - Lambs under 1 year,Total,4405237.8300
+2018-19,WA,Cattle,Total cattle,1989025.0600
+2018-19,WA,Meat cattle,Total,1877675.2300
+2018-19,WA,Meat cattle,Calves less than 1 year,466917.2700
+2018-19,WA,Dairy cattle,All other dairy cattle n.e.c.,9892.9700
+2018-19,TAS,Dairy cattle,Cows in milk and dry,138705.0000
+2018-19,TAS,Cattle,Total cattle,662087.8700
+2018-19,TAS,Sheep and lambs - Lambs under 1 year,Total,739661.5300
+2018-19,TAS,Dairy cattle,Total,231192.2900
+2018-19,TAS,Meat cattle,Cows and heifers 1 year and over,197975.5600
+2018-19,TAS,Dairy cattle,All other dairy cattle n.e.c.,10993.2300
+2018-19,TAS,Sheep and lambs,All other,363409.8400
+2018-19,TAS,Meat cattle,Total,430895.5800
+2018-19,TAS,Meat cattle,All other meat cattle,97407.6200
+2018-19,TAS,Meat cattle,Calves less than 1 year,135512.4000
+2018-19,TAS,Sheep and lambs,Total,2352274.0500
+2019-20,NSW,Dairy cattle,Cows in milk and dry,144141.8300
+2019-20,NSW,Meat cattle,Total,3602632.6600
+2019-20,NSW,Sheep and lambs - Breeding ewes 1 year or over,Total,12165429.9200
+2019-20,NSW,Dairy cattle,Total,254405.8200
+2019-20,NSW,Meat cattle,Cows and heifers 1 year and over,1909739.2200
+2019-20,NSW,Sheep and lambs,Total,20371834.9200
+2019-20,NSW,Meat cattle,All other meat cattle,812469.9400
+2019-20,NSW,Sheep and lambs,All other,2046256.6900
+2019-20,NSW,Sheep and lambs - Marked lambs under 1 year,Total,6160148.3100
+2019-20,NSW,Dairy cattle,All other dairy cattle n.e.c.,6073.1400
+2019-20,NSW,Cattle,Total cattle,3857038.4800
+2019-20,NSW,Meat cattle,Calves less than 1 year,880423.5000
+2019-20,SA,Sheep and lambs,Total,10190074.7400
+2019-20,SA,Sheep and lambs,All other,878554.6900
+2019-20,SA,Dairy cattle,All other dairy cattle n.e.c.,4209.1800
+2019-20,SA,Meat cattle,All other meat cattle,176158.8800
+2019-20,SA,Meat cattle,Calves less than 1 year,280059.4400
+2019-20,SA,Sheep and lambs - Breeding ewes 1 year or over,Total,5498746.6100
+2019-20,SA,Sheep and lambs - Marked lambs under 1 year,Total,3812773.4400
+2019-20,SA,Meat cattle,Cows and heifers 1 year and over,451919.8200
+2019-20,SA,Meat cattle,Total,908138.1400
+2019-20,SA,Dairy cattle,Cows in milk and dry,69752.0100
+2019-20,SA,Cattle,Total cattle,1023836.1800
+2019-20,SA,Dairy cattle,Total,115698.0400
+2019-20,VIC,Sheep and lambs - Breeding ewes 1 year or over,Total,8280290.8900
+2019-20,VIC,Meat cattle,Calves less than 1 year,612529.6100
+2019-20,VIC,Dairy cattle,Total,1469001.4100
+2019-20,VIC,Meat cattle,All other meat cattle,480085.6800
+2019-20,VIC,Sheep and lambs - Marked lambs under 1 year,Total,4868168.5900
+2019-20,VIC,Sheep and lambs,All other,2003714.5800
+2019-20,VIC,Meat cattle,Cows and heifers 1 year and over,952751.6000
+2019-20,VIC,Dairy cattle,Cows in milk and dry,882551.2600
+2019-20,VIC,Dairy cattle,All other dairy cattle n.e.c.,52407.6700
+2019-20,VIC,Sheep and lambs,Total,15152174.0600
+2019-20,VIC,Meat cattle,Total,2045366.9000
+2019-20,VIC,Cattle,Total cattle,3514368.3100
+2019-20,QLD,Dairy cattle,Total,118290.4100
+2019-20,QLD,Meat cattle,Cows and heifers 1 year and over,5406259.2300
+2019-20,QLD,Dairy cattle,All other dairy cattle n.e.c.,4691.0600
+2019-20,QLD,Meat cattle,All other meat cattle,2955317.9700
+2019-20,QLD,Meat cattle,Calves less than 1 year,2019687.7100
+2019-20,QLD,Sheep and lambs - Marked lambs under 1 year,Total,445293.0800
+2019-20,QLD,Dairy cattle,Cows in milk and dry,64161.0400
+2019-20,QLD,Sheep and lambs - Breeding ewes 1 year or over,Total,998391.1800
+2019-20,QLD,Meat cattle,Total,10381264.9000
+2019-20,QLD,Cattle,Total cattle,10499555.3100
+2019-20,QLD,Sheep and lambs,All other,529647.6700
+2019-20,QLD,Sheep and lambs,Total,1973331.9400
+2019-20,WA,Meat cattle,All other meat cattle,389743.2800
+2019-20,WA,Dairy cattle,Cows in milk and dry,50759.6900
+2019-20,WA,Sheep and lambs - Breeding ewes 1 year or over,Total,7141793.8300
+2019-20,WA,Sheep and lambs - Marked lambs under 1 year,Total,4569511.3000
+2019-20,WA,Meat cattle,Total,1922969.4500
+2019-20,WA,Dairy cattle,Total,108891.0700
+2019-20,WA,Cattle,Total cattle,2031860.5200
+2019-20,WA,Meat cattle,Calves less than 1 year,445319.0600
+2019-20,WA,Sheep and lambs,All other,1938823.9400
+2019-20,WA,Dairy cattle,All other dairy cattle n.e.c.,10521.4400
+2019-20,WA,Meat cattle,Cows and heifers 1 year and over,1087907.1000
+2019-20,WA,Sheep and lambs,Total,13650129.0600
+2019-20,TAS,Dairy cattle,Total,295115.1500
+2019-20,TAS,Sheep and lambs - Breeding ewes 1 year or over,Total,1264149.1300
+2019-20,TAS,Sheep and lambs,Total,2161048.5200
+2019-20,TAS,Meat cattle,Cows and heifers 1 year and over,243461.4000
+2019-20,TAS,Sheep and lambs - Marked lambs under 1 year,Total,576165.0300
+2019-20,TAS,Meat cattle,All other meat cattle,95596.4600
+2019-20,TAS,Dairy cattle,All other dairy cattle n.e.c.,6071.6100
+2019-20,TAS,Meat cattle,Total,480247.8200
+2019-20,TAS,Dairy cattle,Cows in milk and dry,182415.9500
+2019-20,TAS,Sheep and lambs,All other,320734.3600
+2019-20,TAS,Meat cattle,Calves less than 1 year,141189.9600
+2019-20,TAS,Cattle,Total cattle,775362.9600
+2020-21,NSW,Sheep and lambs,All other,2408022.0000
+2020-21,NSW,Meat cattle,Calves less than 1 year,1013358.0000
+2020-21,NSW,Meat cattle,Cows and heifers 1 year and over,2171199.0000
+2020-21,NSW,Cattle,Total cattle,4430254.0000
+2020-21,NSW,Sheep and lambs - Marked lambs under 1 year,Total,8229333.0000
+2020-21,NSW,Sheep and lambs - Breeding ewes 1 year or over,Total,14074179.0000
+2020-21,NSW,Dairy cattle,Total,282659.0000
+2020-21,NSW,Meat cattle,All other meat cattle,963037.0000
+2020-21,NSW,Dairy cattle,All other dairy cattle n.e.c.,10421.0000
+2020-21,NSW,Meat cattle,Total,4147595.0000
+2020-21,NSW,Sheep and lambs,Total,24711534.0000
+2020-21,NSW,Dairy cattle,Cows in milk and dry,158855.0000
+2020-21,SA,Meat cattle,All other meat cattle,185961.0000
+2020-21,SA,Meat cattle,Cows and heifers 1 year and over,482514.0000
+2020-21,SA,Dairy cattle,All other dairy cattle n.e.c.,4106.0000
+2020-21,SA,Cattle,Total cattle,1047765.0000
+2020-21,SA,Dairy cattle,Cows in milk and dry,64838.0000
+2020-21,SA,Sheep and lambs,Total,10777694.0000
+2020-21,SA,Dairy cattle,Total,111049.0000
+2020-21,SA,Sheep and lambs - Marked lambs under 1 year,Total,3969714.0000
+2020-21,SA,Meat cattle,Calves less than 1 year,268240.0000
+2020-21,SA,Sheep and lambs,All other,1000147.0000
+2020-21,SA,Meat cattle,Total,936715.0000
+2020-21,SA,Sheep and lambs - Breeding ewes 1 year or over,Total,5807833.0000
+2020-21,VIC,Dairy cattle,All other dairy cattle n.e.c.,45216.0000
+2020-21,VIC,Sheep and lambs,Total,15360673.0000
+2020-21,VIC,Sheep and lambs - Breeding ewes 1 year or over,Total,8373756.0000
+2020-21,VIC,Meat cattle,Calves less than 1 year,660086.0000
+2020-21,VIC,Dairy cattle,Total,1446834.0000
+2020-21,VIC,Sheep and lambs - Marked lambs under 1 year,Total,4966506.0000
+2020-21,VIC,Dairy cattle,Cows in milk and dry,859128.0000
+2020-21,VIC,Meat cattle,All other meat cattle,448497.0000
+2020-21,VIC,Sheep and lambs,All other,2020411.0000
+2020-21,VIC,Cattle,Total cattle,3576654.0000
+2020-21,VIC,Meat cattle,Cows and heifers 1 year and over,1021236.0000
+2020-21,VIC,Meat cattle,Total,2129819.0000
+2020-21,QLD,Dairy cattle,Cows in milk and dry,69295.0000
+2020-21,QLD,Cattle,Total cattle,10728619.0000
+2020-21,QLD,Dairy cattle,Total,123253.0000
+2020-21,QLD,Meat cattle,Cows and heifers 1 year and over,5624842.0000
+2020-21,QLD,Sheep and lambs,Total,2079829.0000
+2020-21,QLD,Sheep and lambs - Marked lambs under 1 year,Total,553103.0000
+2020-21,QLD,Sheep and lambs - Breeding ewes 1 year or over,Total,1115351.0000
+2020-21,QLD,Meat cattle,Total,10605366.0000
+2020-21,QLD,Meat cattle,Calves less than 1 year,2057288.0000
+2020-21,QLD,Sheep and lambs,All other,411375.0000
+2020-21,QLD,Meat cattle,All other meat cattle,2923237.0000
+2020-21,QLD,Dairy cattle,All other dairy cattle n.e.c.,5696.0000
+2020-21,WA,Dairy cattle,Total,109431.0000
+2020-21,WA,Sheep and lambs - Breeding ewes 1 year or over,Total,6854144.0000
+2020-21,WA,Meat cattle,Total,2022715.0000
+2020-21,WA,Sheep and lambs - Marked lambs under 1 year,Total,4236986.0000
+2020-21,WA,Dairy cattle,Cows in milk and dry,52878.0000
+2020-21,WA,Dairy cattle,All other dairy cattle n.e.c.,9771.0000
+2020-21,WA,Sheep and lambs,Total,12714684.0000
+2020-21,WA,Cattle,Total cattle,2132146.0000
+2020-21,WA,Meat cattle,All other meat cattle,357773.0000
+2020-21,WA,Meat cattle,Calves less than 1 year,521538.0000
+2020-21,WA,Meat cattle,Cows and heifers 1 year and over,1143404.0000
+2020-21,WA,Sheep and lambs,All other,1623553.0000
+2020-21,TAS,Meat cattle,All other meat cattle,113718.0000
+2020-21,TAS,Dairy cattle,Total,309614.0000
+2020-21,TAS,Meat cattle,Calves less than 1 year,132092.0000
+2020-21,TAS,Sheep and lambs - Breeding ewes 1 year or over,Total,1379369.0000
+2020-21,TAS,Meat cattle,Total,470459.0000
+2020-21,TAS,Dairy cattle,Cows in milk and dry,183447.0000
+2020-21,TAS,Sheep and lambs,All other,329746.0000
+2020-21,TAS,Sheep and lambs,Total,2371245.0000
+2020-21,TAS,Sheep and lambs - Marked lambs under 1 year,Total,662130.0000
+2020-21,TAS,Cattle,Total cattle,780073.0000
+2020-21,TAS,Meat cattle,Cows and heifers 1 year and over,224649.0000
+2020-21,TAS,Dairy cattle,All other dairy cattle n.e.c.,7402.0000
+2021-22,NSW,Meat cattle,Total,4363219.0000
+2021-22,NSW,Dairy cattle,Total,291682.0000
+2021-22,NSW,Sheep and lambs,Total,27148736.0000
+2021-22,SA,Meat cattle,Total,958449.0000
+2021-22,SA,Sheep and lambs,Total,10594029.0000
+2021-22,SA,Dairy cattle,Total,93724.0000
+2021-22,VIC,Meat cattle,Total,2184630.0000
+2021-22,VIC,Dairy cattle,Total,1290448.0000
+2021-22,VIC,Sheep and lambs,Total,14622952.0000
+2021-22,QLD,Meat cattle,Total,10794395.0000
+2021-22,QLD,Sheep and lambs,Total,2814350.0000
+2021-22,QLD,Dairy cattle,Total,84870.0000
+2021-22,WA,Dairy cattle,Total,88395.0000
+2021-22,WA,Meat cattle,Total,1911720.0000
+2021-22,WA,Sheep and lambs,Total,12416693.0000
+2021-22,TAS,Meat cattle,Total,445577.0000
+2021-22,TAS,Dairy cattle,Total,299316.0000
+2021-22,TAS,Sheep and lambs,Total,2566727.0000

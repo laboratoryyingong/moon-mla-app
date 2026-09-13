@@ -20,13 +20,13 @@ Response fields:
     estimate_value    — head count estimate
 
 Usage:
-    python fetch_report2.py
-    python fetch_report2.py --from-year 2015 --to-year 2021
-    python fetch_report2.py --states NSW VIC QLD
-    python fetch_report2.py --categories "Cattle" "Meat cattle" "Dairy cattle"
-    python fetch_report2.py --list-states
-    python fetch_report2.py --list-categories
-    python fetch_report2.py --output my_herd.csv
+    python fetchers/fetch_report2.py
+    python fetchers/fetch_report2.py --from-year 2015 --to-year 2021
+    python fetchers/fetch_report2.py --states NSW VIC QLD
+    python fetchers/fetch_report2.py --categories "Cattle" "Meat cattle" "Dairy cattle"
+    python fetchers/fetch_report2.py --list-states
+    python fetchers/fetch_report2.py --list-categories
+    python fetchers/fetch_report2.py --output my_herd.csv
 """
 
 import argparse
@@ -51,6 +51,9 @@ def _fmt_duration(seconds: float) -> str:
 
 BASE_URL  = "https://api-mlastatistics.mla.com.au"
 ENDPOINT  = "/report/2"
+
+REPO_ROOT      = Path(__file__).resolve().parents[1]
+DEFAULT_OUTPUT = REPO_ROOT / "data" / "raw" / "report2_herd_flock.csv"
 
 DELAY_MIN  = 1.0
 DELAY_MAX  = 120.0
@@ -216,6 +219,7 @@ def save_csv(rows: list[dict], output_path: str) -> None:
         return
 
     path = Path(output_path)
+    path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=CSV_FIELDS, extrasaction="ignore")
         writer.writeheader()
@@ -241,8 +245,8 @@ def parse_args() -> argparse.Namespace:
                         metavar="CATEGORY",
                         help="Filter by one or more categories (default: all). "
                              "Use --list-categories to see valid values.")
-    parser.add_argument("--output", default="report2_herd_flock.csv",
-                        help="Output CSV file (default: report2_herd_flock.csv)")
+    parser.add_argument("--output", default=str(DEFAULT_OUTPUT),
+                        help="Output CSV file (default: data/raw/report2_herd_flock.csv)")
     parser.add_argument("--list-states", action="store_true",
                         help="Print valid state IDs and exit")
     parser.add_argument("--list-categories", action="store_true",

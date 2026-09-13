@@ -38,11 +38,11 @@ Valid indicatorIDs:
     18  Sheep   Online Sheep Indicator                      $/head
 
 Usage:
-    python fetch_report5.py
-    python fetch_report5.py --from 2024-01-01 --to 2024-12-31
-    python fetch_report5.py --indicators 1 2 3
-    python fetch_report5.py --output my_indicators.csv
-    python fetch_report5.py --list-indicators
+    python fetchers/fetch_report5.py
+    python fetchers/fetch_report5.py --from 2024-01-01 --to 2024-12-31
+    python fetchers/fetch_report5.py --indicators 1 2 3
+    python fetchers/fetch_report5.py --output my_indicators.csv
+    python fetchers/fetch_report5.py --list-indicators
 """
 
 import argparse
@@ -91,6 +91,9 @@ def _progress_bar(done: int, total: int, width: int = 25) -> str:
 BASE_URL  = "https://api-mlastatistics.mla.com.au"
 ENDPOINT  = "/report/5"
 PAGE_SIZE = 100
+
+REPO_ROOT      = Path(__file__).resolve().parents[1]
+DEFAULT_OUTPUT = REPO_ROOT / "data" / "raw" / "report5_livestock_indicators.csv"
 
 # Adaptive rate limiter constants (AIMD)
 DELAY_MIN  = 1.5
@@ -324,6 +327,7 @@ def save_csv(rows: list[dict], output_path: str) -> None:
         print("No data to save.")
         return
     path = Path(output_path)
+    path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=CSV_FIELDS, extrasaction="ignore")
         writer.writeheader()
@@ -347,8 +351,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--indicators", nargs="+", type=int, default=all_ids,
                         metavar="ID",
                         help="Indicator IDs to fetch (default: all 1-18). Use --list-indicators to see options.")
-    parser.add_argument("--output", default="report5_livestock_indicators.csv",
-                        help="Output CSV file (default: report5_livestock_indicators.csv)")
+    parser.add_argument("--output", default=str(DEFAULT_OUTPUT),
+                        help="Output CSV file (default: data/raw/report5_livestock_indicators.csv)")
     parser.add_argument("--list-indicators", action="store_true",
                         help="Print valid indicator IDs and exit")
     parser.add_argument("--email", default="moon.zhou@thomasfoods.com",

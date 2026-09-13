@@ -17,12 +17,12 @@ Response fields:
     head_count     — number of animals
 
 Usage:
-    python fetch_report4.py
-    python fetch_report4.py --from 2024-01-01 --to 2024-12-31
-    python fetch_report4.py --categories Cattle Lamb
-    python fetch_report4.py --saleyard WAG
-    python fetch_report4.py --list-categories
-    python fetch_report4.py --output my_yardings.csv
+    python fetchers/fetch_report4.py
+    python fetchers/fetch_report4.py --from 2024-01-01 --to 2024-12-31
+    python fetchers/fetch_report4.py --categories Cattle Lamb
+    python fetchers/fetch_report4.py --saleyard WAG
+    python fetchers/fetch_report4.py --list-categories
+    python fetchers/fetch_report4.py --output my_yardings.csv
 """
 
 import argparse
@@ -57,6 +57,9 @@ def _progress_bar(done: int, total: int, width: int = 25) -> str:
 BASE_URL  = "https://api-mlastatistics.mla.com.au"
 ENDPOINT  = "/report/4"
 PAGE_SIZE = 100
+
+REPO_ROOT      = Path(__file__).resolve().parents[1]
+DEFAULT_OUTPUT = REPO_ROOT / "data" / "raw" / "report4_saleyard_yardings.csv"
 
 DELAY_MIN  = 1.5
 DELAY_MAX  = 120.0
@@ -245,6 +248,7 @@ def save_csv(rows: list[dict], output_path: str) -> None:
         return
 
     path = Path(output_path)
+    path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=CSV_FIELDS, extrasaction="ignore")
         writer.writeheader()
@@ -271,8 +275,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--saleyard", dest="saleyard_id", default=None,
                         metavar="ID",
                         help="Filter by saleyard ID (e.g. WAG, WOD). Default: all saleyards.")
-    parser.add_argument("--output", default="report4_saleyard_yardings.csv",
-                        help="Output CSV file (default: report4_saleyard_yardings.csv)")
+    parser.add_argument("--output", default=str(DEFAULT_OUTPUT),
+                        help="Output CSV file (default: data/raw/report4_saleyard_yardings.csv)")
     parser.add_argument("--list-categories", action="store_true",
                         help="Print valid category names and exit")
     parser.add_argument("--email", default="moon.zhou@thomasfoods.com",

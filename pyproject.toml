@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mla-stats-fetcher"
+version = "1.0.0"
+description = "Command-line tools for downloading Australian livestock data from the MLA Statistics API"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { file = "LICENSE" }
+dependencies = []
+
+[project.optional-dependencies]
+analysis = ["pandas>=2.0"]
+app = ["streamlit>=1.32", "pandas>=2.0"]
+
+[project.scripts]
+mla = "mla:main"
+
+[tool.setuptools]
+py-modules = ["mla"]
+packages = ["fetchers", "analysis"]

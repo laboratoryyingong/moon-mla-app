@@ -1,0 +1,388 @@
+report_date,report_type,category,location_id,unit_of_measure,value_amt
+2025-06-01,Slaughter,Sheep,New South Wales,000,931.0000
+2025-06-01,Slaughter,Calves,New South Wales,000,20.4000
+2025-06-01,Slaughter,Lambs,Queensland,000,20.7000
+2025-06-01,Production,Sheep,New South Wales,Tonnes,24426.0000
+2025-06-01,Production,Calves,New South Wales,Tonnes,2322.0000
+2025-06-01,Slaughter,Pigs,Queensland,000,361.7000
+2025-06-01,Production,Lambs,Victoria,Tonnes,85706.0000
+2025-06-01,Production,Total Red Meat,Northern Territory,Tonnes,0.0000
+2025-06-01,Production,Total Red Meat,South Australia,Tonnes,78861.0000
+2025-06-01,Slaughter,Calves,South Australia,000,0.0000
+2025-06-01,Slaughter,Lambs,New South Wales,000,1527.2000
+2025-06-01,Production,Cattle (Excl. Calves),Tasmania,Tonnes,18056.0000
+2025-06-01,Slaughter,Lambs,Australian Capital Territory,000,0.0000
+2025-06-01,Slaughter,Pigs,Victoria,000,347.1000
+2025-09-01,Production,Calves,Australian Capital Territory,Tonnes,0.0000
+2025-09-01,Slaughter,Chickens,New South Wales,000,68222.0000
+2025-09-01,Slaughter,Pigs,Tasmania,000,7.3000
+2025-09-01,Production,Total Red Meat,Australia,Tonnes,1066439.0000
+2025-09-01,Slaughter,Calves,Queensland,000,0.1000
+2025-09-01,Slaughter,"Bulls, Bullocks And Steers",Victoria,000,174.0000
+2025-09-01,Production,Chickens,Queensland,Tonnes,63543.0000
+2025-09-01,Production,Pigs,South Australia,Tonnes,26663.0000
+2025-09-01,Slaughter,Pigs,Queensland,000,364.0000
+2025-09-01,Production,Cattle (Excl. Calves),South Australia,Tonnes,30259.0000
+2025-09-01,Slaughter,Lambs,South Australia,000,416.8000
+2025-09-01,Slaughter,Pigs,Australian Capital Territory,000,0.0000
+2025-09-01,Production,Cattle (Excl. Calves),Queensland,Tonnes,349740.0000
+2025-09-01,Slaughter,Cows And Heifers,Western Australia,000,79.4000
+2025-09-01,Slaughter,Calves,South Australia,000,0.0000
+2025-09-01,Slaughter,Calves,Western Australia,000,0.3000
+2025-09-01,Slaughter,Pigs,Australia,000,1466.8000
+2025-09-01,Slaughter,Chickens,Australia,000,191521.3000
+2025-09-01,Slaughter,Lambs,Western Australia,000,518.2000
+2025-12-01,Slaughter,Chickens,Victoria,000,39853.7000
+2025-12-01,Slaughter,Cattle (Excl. Calves),Australian Capital Territory,000,0.0000
+2025-12-01,Slaughter,Cows And Heifers,Australian Capital Territory,000,0.0000
+2025-12-01,Slaughter,Cattle (Excl. Calves),South Australia,000,86.6000
+2025-12-01,Production,Sheep,Western Australia,Tonnes,13564.0000
+2025-12-01,Slaughter,Pigs,South Australia,000,294.6000
+2025-12-01,Slaughter,Chickens,Queensland,000,35277.3000
+2025-12-01,Production,Sheep,Australian Capital Territory,Tonnes,0.0000
+2025-06-01,Slaughter,Sheep,Western Australia,000,455.5000
+2025-06-01,Production,Lambs,New South Wales,Tonnes,40001.0000
+2025-06-01,Production,Sheep,Victoria,Tonnes,18814.0000
+2025-06-01,Slaughter,Pigs,Australian Capital Territory,000,0.0000
+2025-06-01,Production,Total Red Meat,Victoria,Tonnes,289604.0000
+2025-06-01,Slaughter,Cows And Heifers,Northern Territory,000,0.0000
+2025-06-01,Production,Sheep,South Australia,Tonnes,4408.0000
+2025-06-01,Slaughter,Chickens,Western Australia,000,0.0000
+2025-06-01,Production,Total Red Meat,Western Australia,Tonnes,82023.0000
+2025-06-01,Production,Pigs,Queensland,Tonnes,31182.0000
+2025-06-01,Production,Chickens,Western Australia,Tonnes,0.0000
+2025-06-01,Slaughter,Cows And Heifers,New South Wales,000,323.9000
+2025-06-01,Production,Pigs,Western Australia,Tonnes,18664.0000
+2025-09-01,Slaughter,Cattle (Excl. Calves),Queensland,000,1074.8000
+2025-09-01,Slaughter,Cattle (Excl. Calves),New South Wales,000,557.4000
+2025-09-01,Slaughter,Chickens,Victoria,000,38835.2000
+2025-09-01,Slaughter,Cows And Heifers,Australian Capital Territory,000,0.0000
+2025-09-01,Production,Cattle (Excl. Calves),Western Australia,Tonnes,34566.0000
+2025-09-01,Slaughter,Cattle (Excl. Calves),Western Australia,000,125.7000
+2025-09-01,Slaughter,Sheep,Queensland,000,1.0000
+2025-09-01,Slaughter,Calves,Victoria,000,128.2000
+2025-09-01,Slaughter,Cows And Heifers,Queensland,000,422.2000
+2025-09-01,Production,Total Red Meat,Victoria,Tonnes,277779.0000
+2025-12-01,Slaughter,Pigs,Australian Capital Territory,000,0.0000
+2025-12-01,Production,Sheep,New South Wales,Tonnes,26657.0000
+2025-12-01,Slaughter,Cows And Heifers,Northern Territory,000,0.0000
+2025-12-01,Slaughter,Cattle (Excl. Calves),Victoria,000,542.7000
+2025-12-01,Production,Chickens,New South Wales,Tonnes,153282.0000
+2025-12-01,Slaughter,"Bulls, Bullocks And Steers",South Australia,000,54.1000
+2025-06-01,Production,Calves,Australian Capital Territory,Tonnes,0.0000
+2025-06-01,Production,Cattle (Excl. Calves),Australia,Tonnes,717891.0000
+2025-06-01,Slaughter,Cattle (Excl. Calves),Northern Territory,000,0.0000
+2025-06-01,Slaughter,Chickens,South Australia,000,0.0000
+2025-06-01,Slaughter,Lambs,Australia,000,6746.3000
+2025-06-01,Production,Chickens,South Australia,Tonnes,0.0000
+2025-06-01,Slaughter,Sheep,South Australia,000,183.5000
+2025-06-01,Slaughter,Cows And Heifers,Australian Capital Territory,000,0.0000
+2025-09-01,Production,Cattle (Excl. Calves),Victoria,Tonnes,161190.0000
+2025-09-01,Production,Sheep,Northern Territory,Tonnes,0.0000
+2025-09-01,Slaughter,Pigs,Victoria,000,326.2000
+2025-09-01,Production,Sheep,Australia,Tonnes,52341.0000
+2025-09-01,Production,Cattle (Excl. Calves),Northern Territory,Tonnes,0.0000
+2025-09-01,Production,Total Red Meat,South Australia,Tonnes,71552.0000
+2025-09-01,Slaughter,Lambs,New South Wales,000,1330.7000
+2025-09-01,Slaughter,Sheep,Tasmania,000,25.3000
+2025-09-01,Production,Pigs,Australia,Tonnes,123030.0000
+2025-09-01,Slaughter,Calves,Tasmania,000,34.9000
+2025-09-01,Slaughter,Sheep,Northern Territory,000,0.0000
+2025-09-01,Slaughter,Sheep,South Australia,000,126.2000
+2025-09-01,Production,Sheep,Western Australia,Tonnes,7832.0000
+2025-09-01,Production,Chickens,Australia,Tonnes,391524.0000
+2025-09-01,Production,Lambs,Australian Capital Territory,Tonnes,0.0000
+2025-09-01,Production,Lambs,Northern Territory,Tonnes,0.0000
+2025-12-01,Slaughter,Cattle (Excl. Calves),Western Australia,000,122.4000
+2025-12-01,Production,Chickens,Victoria,Tonnes,75330.0000
+2025-12-01,Slaughter,Cattle (Excl. Calves),Queensland,000,939.3000
+2025-12-01,Slaughter,Cattle (Excl. Calves),Tasmania,000,58.1000
+2025-12-01,Production,Lambs,New South Wales,Tonnes,28930.0000
+2025-12-01,Slaughter,Sheep,Australian Capital Territory,000,0.0000
+2025-12-01,Slaughter,Cows And Heifers,Australia,000,1198.3000
+2025-12-01,Production,Pigs,New South Wales,Tonnes,15948.0000
+2025-12-01,Production,Sheep,South Australia,Tonnes,3392.0000
+2025-12-01,Production,Sheep,Victoria,Tonnes,26553.0000
+2025-12-01,Slaughter,Pigs,Western Australia,000,224.8000
+2025-12-01,Slaughter,Cattle (Excl. Calves),Australia,000,2292.5000
+2025-12-01,Production,Pigs,Tasmania,Tonnes,584.0000
+2025-12-01,Production,Cattle (Excl. Calves),South Australia,Tonnes,28162.0000
+2025-12-01,Slaughter,Chickens,New South Wales,000,67837.4000
+2025-12-01,Slaughter,Lambs,Queensland,000,18.4000
+2025-12-01,Slaughter,Lambs,South Australia,000,513.1000
+2025-12-01,Production,Sheep,Australia,Tonnes,71599.0000
+2025-12-01,Production,Lambs,Northern Territory,Tonnes,0.0000
+2025-12-01,Slaughter,Pigs,Northern Territory,000,0.0000
+2025-12-01,Slaughter,"Bulls, Bullocks And Steers",Victoria,000,178.4000
+2025-12-01,Production,Cattle (Excl. Calves),Tasmania,Tonnes,17149.0000
+2025-12-01,Production,Total Red Meat,Queensland,Tonnes,336909.0000
+2025-12-01,Slaughter,Calves,Queensland,000,0.1000
+2025-12-01,Production,Cattle (Excl. Calves),Victoria,Tonnes,160908.0000
+2025-12-01,Slaughter,Calves,Australian Capital Territory,000,0.0000
+2025-12-01,Production,Calves,New South Wales,Tonnes,2410.0000
+2025-12-01,Production,Total Red Meat,Tasmania,Tonnes,21215.0000
+2025-12-01,Slaughter,"Bulls, Bullocks And Steers",Australian Capital Territory,000,0.0000
+2025-12-01,Production,Pigs,Western Australia,Tonnes,17588.0000
+2025-12-01,Production,Cattle (Excl. Calves),Australian Capital Territory,Tonnes,0.0000
+2025-06-01,Production,Cattle (Excl. Calves),Northern Territory,Tonnes,0.0000
+2025-06-01,Slaughter,Sheep,Tasmania,000,67.0000
+2025-06-01,Slaughter,Sheep,Australian Capital Territory,000,0.0000
+2025-06-01,Production,Sheep,Australia,Tonnes,60075.0000
+2025-06-01,Slaughter,Sheep,Victoria,000,873.5000
+2025-06-01,Production,Total Red Meat,Queensland,Tonnes,360741.0000
+2025-06-01,Production,Lambs,Queensland,Tonnes,492.0000
+2025-06-01,Production,Calves,Western Australia,Tonnes,24.0000
+2025-06-01,Production,Lambs,Australian Capital Territory,Tonnes,0.0000
+2025-06-01,Slaughter,Pigs,Tasmania,000,7.1000
+2025-06-01,Slaughter,Calves,Western Australia,000,0.3000
+2025-06-01,Production,Lambs,Tasmania,Tonnes,3079.0000
+2025-06-01,Slaughter,Pigs,South Australia,000,314.2000
+2025-06-01,Production,Sheep,Northern Territory,Tonnes,0.0000
+2025-09-01,Production,Cattle (Excl. Calves),New South Wales,Tonnes,168518.0000
+2025-09-01,Production,Lambs,Western Australia,Tonnes,11610.0000
+2025-09-01,Slaughter,Cows And Heifers,New South Wales,000,348.6000
+2025-09-01,Production,Total Red Meat,Tasmania,Tonnes,18552.0000
+2025-09-01,Slaughter,Chickens,South Australia,000,0.0000
+2025-09-01,Production,Calves,Tasmania,Tonnes,681.0000
+2025-09-01,Slaughter,Cattle (Excl. Calves),Tasmania,000,53.8000
+2025-09-01,Slaughter,Calves,Australia,000,184.9000
+2025-09-01,Slaughter,"Bulls, Bullocks And Steers",Australia,000,1162.6000
+2025-09-01,Production,Pigs,Northern Territory,Tonnes,0.0000
+2025-09-01,Slaughter,Sheep,New South Wales,000,741.2000
+2025-09-01,Production,Calves,Victoria,Tonnes,2427.0000
+2025-09-01,Slaughter,Cows And Heifers,Northern Territory,000,0.0000
+2025-09-01,Production,Chickens,New South Wales,Tonnes,154617.0000
+2025-09-01,Slaughter,Lambs,Northern Territory,000,0.0000
+2025-09-01,Slaughter,Sheep,Australia,000,2007.4000
+2025-09-01,Production,Calves,South Australia,Tonnes,0.0000
+2025-09-01,Production,Calves,Queensland,Tonnes,9.0000
+2025-09-01,Production,Total Red Meat,Northern Territory,Tonnes,0.0000
+2025-09-01,Slaughter,Sheep,Western Australia,000,288.1000
+2025-09-01,Slaughter,Sheep,Victoria,000,825.6000
+2025-12-01,Slaughter,Lambs,Tasmania,000,90.6000
+2025-12-01,Production,Lambs,Western Australia,Tonnes,16559.0000
+2025-12-01,Production,Total Red Meat,Victoria,Tonnes,290436.0000
+2025-12-01,Production,Lambs,Australia,Tonnes,136941.0000
+2025-12-01,Production,Cattle (Excl. Calves),Queensland,Tonnes,307056.0000
+2025-12-01,Production,Cattle (Excl. Calves),Northern Territory,Tonnes,0.0000
+2025-12-01,Slaughter,"Bulls, Bullocks And Steers",Northern Territory,000,0.0000
+2025-12-01,Production,Chickens,Western Australia,Tonnes,0.0000
+2025-12-01,Production,Chickens,Australia,Tonnes,390908.0000
+2025-12-01,Slaughter,Lambs,Victoria,000,3246.8000
+2025-12-01,Production,Lambs,Queensland,Tonnes,426.0000
+2025-12-01,Production,Lambs,Tasmania,Tonnes,1999.0000
+2025-12-01,Production,Pigs,Victoria,Tonnes,26106.0000
+2025-12-01,Slaughter,Cows And Heifers,South Australia,000,32.5000
+2025-12-01,Slaughter,Sheep,New South Wales,000,920.4000
+2025-12-01,Production,Total Red Meat,New South Wales,Tonnes,238144.0000
+2025-12-01,Slaughter,Lambs,Australia,000,5759.9000
+2025-12-01,Slaughter,Cows And Heifers,Western Australia,000,71.5000
+2025-12-01,Production,Lambs,Victoria,Tonnes,76307.0000
+2025-12-01,Slaughter,Calves,Northern Territory,000,0.0000
+2025-12-01,Slaughter,Lambs,New South Wales,000,1164.2000
+2025-12-01,Production,Calves,Tasmania,Tonnes,115.0000
+2025-12-01,Production,Total Red Meat,Australia,Tonnes,1038589.0000
+2025-06-01,Production,Total Red Meat,Australia,Tonnes,1072399.0000
+2025-06-01,Slaughter,"Bulls, Bullocks And Steers",Northern Territory,000,0.0000
+2025-06-01,Production,Calves,South Australia,Tonnes,0.0000
+2025-06-01,Production,Sheep,Australian Capital Territory,Tonnes,0.0000
+2025-06-01,Slaughter,"Bulls, Bullocks And Steers",Tasmania,000,29.1000
+2025-06-01,Slaughter,Cows And Heifers,Australia,000,1274.3000
+2025-06-01,Slaughter,Pigs,Northern Territory,000,0.0000
+2025-06-01,Production,Lambs,Northern Territory,Tonnes,0.0000
+2025-06-01,Production,Lambs,South Australia,Tonnes,18668.0000
+2025-06-01,Production,Calves,Australia,Tonnes,3925.0000
+2025-06-01,Slaughter,Calves,Queensland,000,0.1000
+2025-06-01,Production,Sheep,Western Australia,Tonnes,11024.0000
+2025-06-01,Production,Cattle (Excl. Calves),South Australia,Tonnes,29145.0000
+2025-06-01,Production,Cattle (Excl. Calves),Queensland,Tonnes,329034.0000
+2025-09-01,Production,Calves,Northern Territory,Tonnes,0.0000
+2025-09-01,Production,Lambs,New South Wales,Tonnes,34014.0000
+2025-09-01,Production,Sheep,Victoria,Tonnes,19816.0000
+2025-09-01,Production,Cattle (Excl. Calves),Australia,Tonnes,759270.0000
+2025-09-01,Production,Total Red Meat,Western Australia,Tonnes,72635.0000
+2025-09-01,Slaughter,Cattle (Excl. Calves),Victoria,000,567.6000
+2025-09-01,Production,Sheep,Tasmania,Tonnes,499.0000
+2025-09-01,Slaughter,Calves,New South Wales,000,21.3000
+2025-09-01,Slaughter,Cows And Heifers,Tasmania,000,28.4000
+2025-09-01,Slaughter,Cows And Heifers,South Australia,000,40.4000
+2025-09-01,Slaughter,Cattle (Excl. Calves),South Australia,000,96.0000
+2025-09-01,Production,Calves,New South Wales,Tonnes,2486.0000
+2025-09-01,Slaughter,Lambs,Victoria,000,2834.0000
+2025-09-01,Production,Total Red Meat,New South Wales,Tonnes,243548.0000
+2025-09-01,Production,Lambs,Victoria,Tonnes,66922.0000
+2025-09-01,Production,Sheep,Australian Capital Territory,Tonnes,0.0000
+2025-09-01,Slaughter,Lambs,Australian Capital Territory,000,0.0000
+2025-09-01,Production,Calves,Western Australia,Tonnes,25.0000
+2025-09-01,Production,Sheep,New South Wales,Tonnes,20922.0000
+2025-09-01,Production,Lambs,Tasmania,Tonnes,1785.0000
+2025-09-01,Slaughter,Pigs,Western Australia,000,229.5000
+2025-09-01,Production,Lambs,Queensland,Tonnes,456.0000
+2025-09-01,Slaughter,Cattle (Excl. Calves),Australian Capital Territory,000,0.0000
+2025-09-01,Production,Total Red Meat,Queensland,Tonnes,382373.0000
+2025-09-01,Slaughter,Pigs,New South Wales,000,229.0000
+2025-12-01,Slaughter,"Bulls, Bullocks And Steers",Australia,000,1094.2000
+2025-12-01,Production,Calves,Victoria,Tonnes,562.0000
+2025-12-01,Slaughter,Cows And Heifers,New South Wales,000,341.2000
+2025-12-01,Slaughter,Sheep,Queensland,000,2.8000
+2025-12-01,Slaughter,Lambs,Western Australia,000,726.9000
+2025-12-01,Production,Lambs,South Australia,Tonnes,12720.0000
+2025-12-01,Production,Sheep,Tasmania,Tonnes,1367.0000
+2025-12-01,Slaughter,"Bulls, Bullocks And Steers",Tasmania,000,27.3000
+2025-12-01,Slaughter,Sheep,Western Australia,000,497.5000
+2025-12-01,Slaughter,Cows And Heifers,Victoria,000,364.3000
+2025-12-01,Production,Calves,Australian Capital Territory,Tonnes,0.0000
+2025-12-01,Production,Chickens,Queensland,Tonnes,65678.0000
+2025-12-01,Slaughter,Calves,Australia,000,55.9000
+2025-12-01,Slaughter,Lambs,Northern Territory,000,0.0000
+2025-12-01,Slaughter,Chickens,South Australia,000,0.0000
+2025-12-01,Slaughter,Chickens,Western Australia,000,0.0000
+2025-12-01,Slaughter,Calves,New South Wales,000,21.9000
+2025-12-01,Slaughter,"Bulls, Bullocks And Steers",Queensland,000,581.3000
+2025-12-01,Production,Lambs,Australian Capital Territory,Tonnes,0.0000
+2025-12-01,Production,Calves,Queensland,Tonnes,6.0000
+2025-12-01,Slaughter,Sheep,Tasmania,000,58.8000
+2025-12-01,Slaughter,Sheep,Northern Territory,000,0.0000
+2025-12-01,Production,Total Red Meat,Northern Territory,Tonnes,0.0000
+2025-06-01,Slaughter,Cattle (Excl. Calves),Australia,000,2338.2000
+2025-06-01,Slaughter,Sheep,Northern Territory,000,0.0000
+2025-06-01,Production,Lambs,Western Australia,Tonnes,19216.0000
+2025-06-01,Production,Chickens,Queensland,Tonnes,65112.0000
+2025-06-01,Slaughter,Cows And Heifers,Queensland,000,418.0000
+2025-06-01,Slaughter,Cows And Heifers,Tasmania,000,34.5000
+2025-06-01,Slaughter,Pigs,Australia,000,1477.5000
+2025-06-01,Production,Total Red Meat,Australian Capital Territory,Tonnes,0.0000
+2025-06-01,Slaughter,Cattle (Excl. Calves),Tasmania,000,63.6000
+2025-09-01,Production,Pigs,Victoria,Tonnes,27424.0000
+2025-09-01,Production,Pigs,Queensland,Tonnes,32142.0000
+2025-09-01,Production,Sheep,Queensland,Tonnes,26.0000
+2025-09-01,Slaughter,Calves,Australian Capital Territory,000,0.0000
+2025-09-01,Slaughter,Calves,Northern Territory,000,0.0000
+2025-09-01,Production,Lambs,South Australia,Tonnes,11383.0000
+2025-09-01,Production,Cattle (Excl. Calves),Australian Capital Territory,Tonnes,0.0000
+2025-09-01,Production,Pigs,Tasmania,Tonnes,590.0000
+2025-09-01,Slaughter,Lambs,Tasmania,000,83.1000
+2025-09-01,Slaughter,Chickens,Queensland,000,34154.7000
+2025-12-01,Production,Cattle (Excl. Calves),Australia,Tonnes,712888.0000
+2025-12-01,Slaughter,Pigs,Victoria,000,318.3000
+2025-12-01,Slaughter,Calves,Tasmania,000,5.8000
+2025-12-01,Production,Pigs,Queensland,Tonnes,29354.0000
+2025-12-01,Slaughter,Calves,South Australia,000,0.0000
+2025-12-01,Production,Pigs,Australia,Tonnes,114043.0000
+2025-12-01,Slaughter,Cows And Heifers,Queensland,000,357.9000
+2025-12-01,Slaughter,Cows And Heifers,Tasmania,000,30.8000
+2025-12-01,Slaughter,Pigs,Tasmania,000,7.3000
+2025-12-01,Slaughter,"Bulls, Bullocks And Steers",New South Wales,000,202.2000
+2025-12-01,Production,Chickens,South Australia,Tonnes,0.0000
+2025-12-01,Slaughter,Calves,Victoria,000,27.8000
+2025-12-01,Slaughter,Chickens,Australia,000,194098.2000
+2025-12-01,Production,Sheep,Queensland,Tonnes,66.0000
+2025-12-01,Slaughter,Lambs,Australian Capital Territory,000,0.0000
+2025-12-01,Slaughter,Sheep,Victoria,000,1046.8000
+2025-12-01,Production,Calves,Western Australia,Tonnes,24.0000
+2025-12-01,Slaughter,Sheep,South Australia,000,126.3000
+2025-12-01,Production,Cattle (Excl. Calves),Western Australia,Tonnes,35415.0000
+2025-12-01,Production,Pigs,South Australia,Tonnes,24463.0000
+2025-06-01,Slaughter,Chickens,Victoria,000,38005.5000
+2025-06-01,Production,Pigs,Northern Territory,Tonnes,0.0000
+2025-06-01,Slaughter,Calves,Australian Capital Territory,000,0.0000
+2025-06-01,Production,Pigs,Tasmania,Tonnes,569.0000
+2025-06-01,Production,Cattle (Excl. Calves),Australian Capital Territory,Tonnes,0.0000
+2025-06-01,Production,Pigs,Australia,Tonnes,123346.0000
+2025-06-01,Production,Pigs,Victoria,Tonnes,29330.0000
+2025-06-01,Production,Chickens,Australia,Tonnes,394818.0000
+2025-06-01,Production,Cattle (Excl. Calves),New South Wales,Tonnes,154353.0000
+2025-06-01,Production,Cattle (Excl. Calves),Western Australia,Tonnes,33095.0000
+2025-06-01,Slaughter,Chickens,Queensland,000,34455.9000
+2025-06-01,Slaughter,Calves,Northern Territory,000,0.0000
+2025-06-01,Slaughter,"Bulls, Bullocks And Steers",Australian Capital Territory,000,0.0000
+2025-06-01,Production,Pigs,South Australia,Tonnes,26639.0000
+2025-06-01,Slaughter,Lambs,South Australia,000,706.7000
+2025-06-01,Slaughter,Lambs,Northern Territory,000,0.0000
+2025-06-01,Slaughter,Lambs,Western Australia,000,817.0000
+2025-06-01,Production,Calves,Queensland,Tonnes,7.0000
+2025-06-01,Slaughter,Cattle (Excl. Calves),Victoria,000,539.5000
+2025-06-01,Slaughter,Sheep,Queensland,000,0.9000
+2025-06-01,Production,Cattle (Excl. Calves),Victoria,Tonnes,154208.0000
+2025-06-01,Slaughter,Chickens,New South Wales,000,66293.2000
+2025-06-01,Production,Chickens,New South Wales,Tonnes,154541.0000
+2025-06-01,Production,Sheep,Tasmania,Tonnes,1376.0000
+2025-06-01,Slaughter,Cattle (Excl. Calves),Australian Capital Territory,000,0.0000
+2025-06-01,Production,Calves,Victoria,Tonnes,1547.0000
+2025-06-01,Production,Pigs,Australian Capital Territory,Tonnes,0.0000
+2025-06-01,Production,Calves,Tasmania,Tonnes,26.0000
+2025-06-01,Production,Total Red Meat,New South Wales,Tonnes,238064.0000
+2025-06-01,Slaughter,Lambs,Tasmania,000,159.0000
+2025-09-01,Production,Pigs,New South Wales,Tonnes,17609.0000
+2025-09-01,Slaughter,"Bulls, Bullocks And Steers",Queensland,000,652.6000
+2025-09-01,Slaughter,Pigs,South Australia,000,310.7000
+2025-09-01,Production,Lambs,Australia,Tonnes,126171.0000
+2025-09-01,Production,Total Red Meat,Australian Capital Territory,Tonnes,0.0000
+2025-09-01,Slaughter,"Bulls, Bullocks And Steers",New South Wales,000,208.8000
+2025-09-01,Slaughter,Cattle (Excl. Calves),Northern Territory,000,0.0000
+2025-09-01,Slaughter,Cattle (Excl. Calves),Australia,000,2475.3000
+2025-09-01,Production,Cattle (Excl. Calves),Tasmania,Tonnes,14997.0000
+2025-09-01,Slaughter,Cows And Heifers,Victoria,000,393.7000
+2025-09-01,Production,Chickens,Victoria,Tonnes,77142.0000
+2025-09-01,Slaughter,"Bulls, Bullocks And Steers",Australian Capital Territory,000,0.0000
+2025-09-01,Slaughter,Cows And Heifers,Australia,000,1312.7000
+2025-09-01,Slaughter,Pigs,Northern Territory,000,0.0000
+2025-09-01,Production,Pigs,Australian Capital Territory,Tonnes,0.0000
+2025-09-01,Production,Sheep,South Australia,Tonnes,3246.0000
+2025-09-01,Slaughter,Chickens,Western Australia,000,0.0000
+2025-09-01,Slaughter,Sheep,Australian Capital Territory,000,0.0000
+2025-12-01,Slaughter,Pigs,Australia,000,1411.6000
+2025-12-01,Production,Calves,South Australia,Tonnes,0.0000
+2025-12-01,Production,Cattle (Excl. Calves),New South Wales,Tonnes,164199.0000
+2025-12-01,Slaughter,Cattle (Excl. Calves),Northern Territory,000,0.0000
+2025-12-01,Slaughter,Sheep,Australia,000,2652.7000
+2025-12-01,Production,Pigs,Northern Territory,Tonnes,0.0000
+2025-12-01,Production,Calves,Northern Territory,Tonnes,0.0000
+2025-12-01,Production,Total Red Meat,Western Australia,Tonnes,83150.0000
+2025-12-01,Production,Total Red Meat,South Australia,Tonnes,68736.0000
+2025-12-01,Production,Sheep,Northern Territory,Tonnes,0.0000
+2025-12-01,Slaughter,Pigs,Queensland,000,349.9000
+2025-12-01,Production,Pigs,Australian Capital Territory,Tonnes,0.0000
+2025-06-01,Slaughter,Cows And Heifers,Victoria,000,385.0000
+2025-06-01,Production,Total Red Meat,Tasmania,Tonnes,23106.0000
+2025-06-01,Slaughter,Cattle (Excl. Calves),New South Wales,000,512.7000
+2025-06-01,Slaughter,Pigs,Western Australia,000,226.7000
+2025-06-01,Slaughter,Pigs,New South Wales,000,220.7000
+2025-06-01,Slaughter,"Bulls, Bullocks And Steers",New South Wales,000,188.9000
+2025-06-01,Slaughter,Cattle (Excl. Calves),Queensland,000,1012.6000
+2025-06-01,Production,Chickens,Victoria,Tonnes,73655.0000
+2025-06-01,Slaughter,"Bulls, Bullocks And Steers",Victoria,000,154.5000
+2025-06-01,Slaughter,Calves,Victoria,000,80.7000
+2025-06-01,Slaughter,"Bulls, Bullocks And Steers",Australia,000,1064.0000
+2025-06-01,Slaughter,Cattle (Excl. Calves),Western Australia,000,118.7000
+2025-06-01,Slaughter,Cows And Heifers,South Australia,000,43.0000
+2025-06-01,Production,Calves,Northern Territory,Tonnes,0.0000
+2025-06-01,Slaughter,Calves,Tasmania,000,1.1000
+2025-06-01,Slaughter,"Bulls, Bullocks And Steers",Western Australia,000,48.8000
+2025-06-01,Slaughter,Chickens,Australia,000,189935.2000
+2025-06-01,Production,Sheep,Queensland,Tonnes,26.0000
+2025-06-01,Slaughter,Sheep,Australia,000,2511.5000
+2025-06-01,Production,Lambs,Australia,Tonnes,167162.0000
+2025-06-01,Slaughter,Lambs,Victoria,000,3515.6000
+2025-06-01,Production,Pigs,New South Wales,Tonnes,16963.0000
+2025-06-01,Slaughter,"Bulls, Bullocks And Steers",South Australia,000,48.1000
+2025-06-01,Slaughter,Calves,Australia,000,102.6000
+2025-06-01,Slaughter,"Bulls, Bullocks And Steers",Queensland,000,594.6000
+2025-06-01,Slaughter,Cattle (Excl. Calves),South Australia,000,91.1000
+2025-06-01,Slaughter,Cows And Heifers,Western Australia,000,69.9000
+2025-09-01,Production,Pigs,Western Australia,Tonnes,18602.0000
+2025-09-01,Slaughter,"Bulls, Bullocks And Steers",Northern Territory,000,0.0000
+2025-09-01,Slaughter,"Bulls, Bullocks And Steers",Western Australia,000,46.3000
+2025-09-01,Production,Chickens,South Australia,Tonnes,0.0000
+2025-09-01,Production,Chickens,Western Australia,Tonnes,0.0000
+2025-09-01,Slaughter,Lambs,Queensland,000,19.2000
+2025-09-01,Slaughter,"Bulls, Bullocks And Steers",South Australia,000,55.6000
+2025-09-01,Slaughter,"Bulls, Bullocks And Steers",Tasmania,000,25.3000
+2025-09-01,Production,Calves,Australia,Tonnes,5627.0000
+2025-09-01,Slaughter,Lambs,Australia,000,5202.0000
+2025-12-01,Slaughter,Calves,Western Australia,000,0.2000
+2025-12-01,Production,Total Red Meat,Australian Capital Territory,Tonnes,0.0000
+2025-12-01,Slaughter,Pigs,New South Wales,000,216.8000
+2025-12-01,Slaughter,"Bulls, Bullocks And Steers",Western Australia,000,50.9000
+2025-12-01,Production,Calves,Australia,Tonnes,3118.0000
+2025-12-01,Slaughter,Cattle (Excl. Calves),New South Wales,000,543.4000

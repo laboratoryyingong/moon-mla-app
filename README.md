@@ -4,30 +4,80 @@ Command-line tools and a local web app for downloading Australian livestock data
 
 ---
 
+## Quick Start
+
+The `mla` command is the single entry point for everything in this repository.
+It needs only the Python standard library.
+
+```bash
+# Install the `mla` command (or run `python3 mla.py ...` without installing)
+pip install -e .
+
+mla list                                          # see the ten available reports
+mla fetch 3 --from 2024-01-01 --to 2024-12-31     # download one report to data/raw/
+mla fetch nlrs-slaughter --list-species           # discover a report's filter values
+mla fetch-all --from 2025-01-01                   # download every report in one go
+mla merge                                         # build the weekly analysis table (needs pandas)
+mla app                                           # launch the web app (needs streamlit)
+```
+
+Full reference for every command and option: **[docs/CLI.md](docs/CLI.md)**.
+
+The sections below document each report's data, filters and output format in detail.
+
+---
+
 ## Tools Overview
 
 | Tool | Endpoint | Data | Frequency |
 |---|---|---|---|
-| `fetch_report1.py` | `/report/1` | Australian Red Meat Exports — volume by country | Monthly |
-| `fetch_report2.py` | `/report/2` | Australian Herd and Flock Figures — ABS estimates by state | Annual (financial year) |
-| `fetch_report3.py` | `/report/3` | Australian Slaughter and Production — ABS figures by category | Quarterly |
-| `fetch_report4.py` | `/report/4` | Australian Saleyard Yardings — NLRS head count by saleyard × category | Daily |
-| `fetch_report5.py` | `/report/5` | NLRS Livestock Indicators — national price indices | Daily |
-| `fetch_report6.py` | `/report/6` | NLRS Livestock Indicators (By Saleyard) — price indices per saleyard | Daily |
-| `fetch_report7.py` | `/report/7` | Global Cattle Prices — NLRS (AUS) + US Steiner Consulting (USA) | Daily / Weekly |
-| `fetch_report8.py` | `/report/8` | US Domestic Cattle Prices — US Steiner Consulting | Weekly |
-| `fetch_report9.py` | `/report/9` | US Imported Meat Prices — US Steiner Consulting | Weekly |
-| `fetch_report10.py` | `/report/10` | NLRS Slaughter — head count by state × species | Weekly (Fridays) |
-| `merge_reports.py` | — | Join report/5 + report/10 into a weekly analysis table | — |
+| `mla.py` | all | Unified CLI: `list`, `fetch`, `fetch-all`, `merge`, `app` — see [docs/CLI.md](docs/CLI.md) | — |
+| `fetchers/fetch_report1.py` | `/report/1` | Australian Red Meat Exports — volume by country | Monthly |
+| `fetchers/fetch_report2.py` | `/report/2` | Australian Herd and Flock Figures — ABS estimates by state | Annual (financial year) |
+| `fetchers/fetch_report3.py` | `/report/3` | Australian Slaughter and Production — ABS figures by category | Quarterly |
+| `fetchers/fetch_report4.py` | `/report/4` | Australian Saleyard Yardings — NLRS head count by saleyard × category | Daily |
+| `fetchers/fetch_report5.py` | `/report/5` | NLRS Livestock Indicators — national price indices | Daily |
+| `fetchers/fetch_report6.py` | `/report/6` | NLRS Livestock Indicators (By Saleyard) — price indices per saleyard | Daily |
+| `fetchers/fetch_report7.py` | `/report/7` | Global Cattle Prices — NLRS (AUS) + US Steiner Consulting (USA) | Daily / Weekly |
+| `fetchers/fetch_report8.py` | `/report/8` | US Domestic Cattle Prices — US Steiner Consulting | Weekly |
+| `fetchers/fetch_report9.py` | `/report/9` | US Imported Meat Prices — US Steiner Consulting | Weekly |
+| `fetchers/fetch_report10.py` | `/report/10` | NLRS Slaughter — head count by state × species | Weekly (Fridays) |
+| `analysis/merge_reports.py` | — | Join report/5 + report/10 into a weekly analysis table | — |
 | `app.py` | — | Local Streamlit web app for `/report/10` | — |
+
+---
+
+## Project Structure
+
+```
+moon-mla-app/
+├── mla.py                  # Unified CLI entry point (`mla` after pip install -e .)
+├── app.py                  # Streamlit web app (entry point: streamlit run app.py)
+├── fetchers/               # One standalone CLI script per MLA API endpoint
+│   ├── fetch_report1.py    #   /report/1  … /report/10
+│   └── ...
+├── analysis/
+│   └── merge_reports.py    # Joins report/5 + report/10 into a weekly table
+├── data/
+│   ├── raw/                # CSV output of the fetchers (default --output location)
+│   └── processed/          # merged_weekly.csv, indicator_lookup.csv
+├── assets/                 # Logo and static files used by the web app
+├── docs/
+│   └── CLI.md              # Full reference for the `mla` command
+├── pyproject.toml          # Installs the `mla` console command
+├── requirements.txt
+└── README.md
+```
+
+All commands below are run from the repository root.
 
 ---
 
 ## Requirements
 
 - Python 3.9+
-- `fetch_report1.py`, `fetch_report2.py`, `fetch_report3.py`, `fetch_report4.py`, `fetch_report5.py`, `fetch_report6.py`, `fetch_report7.py`, `fetch_report8.py`, `fetch_report9.py`, `fetch_report10.py` — standard library only, no pip required
-- `merge_reports.py` — requires `pandas` (`pip install pandas`)
+- `fetchers/fetch_report1.py`, `fetchers/fetch_report2.py`, `fetchers/fetch_report3.py`, `fetchers/fetch_report4.py`, `fetchers/fetch_report5.py`, `fetchers/fetch_report6.py`, `fetchers/fetch_report7.py`, `fetchers/fetch_report8.py`, `fetchers/fetch_report9.py`, `fetchers/fetch_report10.py` — standard library only, no pip required
+- `analysis/merge_reports.py` — requires `pandas` (`pip install pandas`)
 - `app.py` — requires `streamlit` and `pandas` (see [Web App](#web-app) section)
 
 ---
@@ -41,13 +91,13 @@ Data available from January 2000 to present. No cross-year limitations — any d
 
 ```bash
 # Fetch last 3 years (default)
-python3 fetch_report1.py
+python3 fetchers/fetch_report1.py
 
 # Fetch a specific date range
-python3 fetch_report1.py --from 2024-04-01 --to 2026-04-26
+python3 fetchers/fetch_report1.py --from 2024-04-01 --to 2026-04-26
 
 # Custom output file
-python3 fetch_report1.py --from 2024-01-01 --to 2024-12-31 --output exports_2024.csv
+python3 fetchers/fetch_report1.py --from 2024-01-01 --to 2024-12-31 --output exports_2024.csv
 ```
 
 ### Options
@@ -56,7 +106,7 @@ python3 fetch_report1.py --from 2024-01-01 --to 2024-12-31 --output exports_2024
 |---|---|---|
 | `--from YYYY-MM-DD` | Jan 1 three years ago | Start date |
 | `--to YYYY-MM-DD` | Today | End date |
-| `--output FILE` | `report1_red_meat_exports.csv` | Output CSV path |
+| `--output FILE` | `data/raw/report1_red_meat_exports.csv` | Output CSV path |
 | `--email EMAIL` | `moon.zhou@thomasfoods.com` | Contact email sent in User-Agent header |
 
 ### Available Countries
@@ -95,13 +145,13 @@ result_date,country_desc,meat_type_group_desc,weight_amt
 
 ```bash
 # Full history from 2000
-python3 fetch_report1.py --from 2000-01-01 --to 2026-04-26 --output exports_all.csv
+python3 fetchers/fetch_report1.py --from 2000-01-01 --to 2026-04-26 --output exports_all.csv
 
 # Recent 1 year
-python3 fetch_report1.py --from 2025-04-01 --to 2026-04-26 --output exports_last_year.csv
+python3 fetchers/fetch_report1.py --from 2025-04-01 --to 2026-04-26 --output exports_last_year.csv
 
 # 2023–2024 comparison
-python3 fetch_report1.py --from 2023-01-01 --to 2024-12-31 --output exports_2023_2024.csv
+python3 fetchers/fetch_report1.py --from 2023-01-01 --to 2024-12-31 --output exports_2023_2024.csv
 ```
 
 ---
@@ -120,20 +170,20 @@ all `(year × state × category)` combinations automatically.
 
 ```bash
 # Fetch all available years, all states, all categories (default)
-python3 fetch_report2.py
+python3 fetchers/fetch_report2.py
 
 # Fetch specific years
-python3 fetch_report2.py --from-year 2018 --to-year 2021
+python3 fetchers/fetch_report2.py --from-year 2018 --to-year 2021
 
 # Specific states only
-python3 fetch_report2.py --from-year 2018 --to-year 2021 --states NSW VIC QLD
+python3 fetchers/fetch_report2.py --from-year 2018 --to-year 2021 --states NSW VIC QLD
 
 # Specific categories only
-python3 fetch_report2.py --from-year 2018 --to-year 2021 --categories "Cattle" "Meat cattle"
+python3 fetchers/fetch_report2.py --from-year 2018 --to-year 2021 --categories "Cattle" "Meat cattle"
 
 # See all valid values
-python3 fetch_report2.py --list-states
-python3 fetch_report2.py --list-categories
+python3 fetchers/fetch_report2.py --list-states
+python3 fetchers/fetch_report2.py --list-categories
 ```
 
 ### Options
@@ -144,7 +194,7 @@ python3 fetch_report2.py --list-categories
 | `--to-year YEAR` | Current year | End year (integer) |
 | `--states` | All 6 states | Filter by one or more states (see below) |
 | `--categories` | All categories | Filter by one or more categories (see below) |
-| `--output FILE` | `report2_herd_flock.csv` | Output CSV path |
+| `--output FILE` | `data/raw/report2_herd_flock.csv` | Output CSV path |
 | `--list-states` | — | Print valid state IDs and exit |
 | `--list-categories` | — | Print valid category names and exit |
 | `--email EMAIL` | `moon.zhou@thomasfoods.com` | Contact email sent in User-Agent header |
@@ -193,16 +243,16 @@ financial_year,region_desc,subcategory_desc,metric_desc,estimate_value
 
 ```bash
 # All available data, all states and categories
-python3 fetch_report2.py --from-year 2015 --to-year 2021 --output herd_flock_all.csv
+python3 fetchers/fetch_report2.py --from-year 2015 --to-year 2021 --output herd_flock_all.csv
 
 # Cattle only, all states
-python3 fetch_report2.py \
+python3 fetchers/fetch_report2.py \
   --from-year 2015 --to-year 2021 \
   --categories "Cattle" "Dairy cattle" "Meat cattle" \
   --output cattle_herd.csv
 
 # Sheep and lambs for QLD and NSW only
-python3 fetch_report2.py \
+python3 fetchers/fetch_report2.py \
   --from-year 2015 --to-year 2021 \
   --states NSW QLD \
   --categories "Sheep and lambs" "Sheep and lambs - Lambs under 1 year" \
@@ -223,16 +273,16 @@ when multiple categories are selected the script iterates and combines results a
 
 ```bash
 # Fetch last year, all categories (default)
-python3 fetch_report3.py
+python3 fetchers/fetch_report3.py
 
 # Fetch a specific date range
-python3 fetch_report3.py --from 2022-01-01 --to 2024-12-31
+python3 fetchers/fetch_report3.py --from 2022-01-01 --to 2024-12-31
 
 # Fetch specific categories only
-python3 fetch_report3.py --categories Cattle Lambs Sheep
+python3 fetchers/fetch_report3.py --categories Cattle Lambs Sheep
 
 # See all valid category names
-python3 fetch_report3.py --list-categories
+python3 fetchers/fetch_report3.py --list-categories
 ```
 
 ### Options
@@ -242,7 +292,7 @@ python3 fetch_report3.py --list-categories
 | `--from YYYY-MM-DD` | Jan 1 of last year | Start date |
 | `--to YYYY-MM-DD` | Today | End date |
 | `--categories` | All categories | Filter by one or more categories (see below) |
-| `--output FILE` | `report3_slaughter_production.csv` | Output CSV path |
+| `--output FILE` | `data/raw/report3_slaughter_production.csv` | Output CSV path |
 | `--list-categories` | — | Print valid category names and exit |
 | `--email EMAIL` | `moon.zhou@thomasfoods.com` | Contact email sent in User-Agent header |
 
@@ -282,13 +332,13 @@ report_date,report_type,category,location_id,unit_of_measure,value_amt
 
 ```bash
 # Full history from 2000, all categories
-python3 fetch_report3.py --from 2000-01-01 --to 2026-04-26 --output r3_all.csv
+python3 fetchers/fetch_report3.py --from 2000-01-01 --to 2026-04-26 --output r3_all.csv
 
 # Recent 1 year
-python3 fetch_report3.py --from 2025-04-01 --to 2026-04-26
+python3 fetchers/fetch_report3.py --from 2025-04-01 --to 2026-04-26
 
 # Cattle and sheep only for 2023–2024
-python3 fetch_report3.py \
+python3 fetchers/fetch_report3.py \
   --from 2023-01-01 \
   --to 2024-12-31 \
   --categories "Cattle (Excl. Calves)" "Cows And Heifers" "Bulls, Bullocks And Steers" Sheep Lambs \
@@ -309,19 +359,19 @@ when multiple categories are selected the script iterates and combines results a
 
 ```bash
 # Fetch last year, all categories (default)
-python3 fetch_report4.py
+python3 fetchers/fetch_report4.py
 
 # Fetch a specific date range
-python3 fetch_report4.py --from 2024-01-01 --to 2024-12-31
+python3 fetchers/fetch_report4.py --from 2024-01-01 --to 2024-12-31
 
 # Fetch specific categories only
-python3 fetch_report4.py --categories Cattle Lamb
+python3 fetchers/fetch_report4.py --categories Cattle Lamb
 
 # Filter by saleyard
-python3 fetch_report4.py --saleyard WAG
+python3 fetchers/fetch_report4.py --saleyard WAG
 
 # See all valid category names
-python3 fetch_report4.py --list-categories
+python3 fetchers/fetch_report4.py --list-categories
 ```
 
 ### Options
@@ -332,7 +382,7 @@ python3 fetch_report4.py --list-categories
 | `--to YYYY-MM-DD` | Today | End date |
 | `--categories` | All categories | Filter by one or more categories (see below) |
 | `--saleyard ID` | All saleyards | Filter by saleyard ID (e.g. `WAG`, `WOD`) |
-| `--output FILE` | `report4_saleyard_yardings.csv` | Output CSV path |
+| `--output FILE` | `data/raw/report4_saleyard_yardings.csv` | Output CSV path |
 | `--list-categories` | — | Print valid category names and exit |
 | `--email EMAIL` | `moon.zhou@thomasfoods.com` | Contact email sent in User-Agent header |
 
@@ -366,16 +416,16 @@ result_date,category_desc,state_id,saleyard_id,tranx_type_id,head_count
 
 ```bash
 # Full history from 2000, all categories
-python3 fetch_report4.py --from 2000-01-01 --to 2026-04-26 --output yardings_all.csv
+python3 fetchers/fetch_report4.py --from 2000-01-01 --to 2026-04-26 --output yardings_all.csv
 
 # Cattle only for 2024
-python3 fetch_report4.py --from 2024-01-01 --to 2024-12-31 --categories Cattle --output cattle_yardings_2024.csv
+python3 fetchers/fetch_report4.py --from 2024-01-01 --to 2024-12-31 --categories Cattle --output cattle_yardings_2024.csv
 
 # One specific saleyard (Wagga Wagga), all categories
-python3 fetch_report4.py --saleyard WAG --output yardings_wag.csv
+python3 fetchers/fetch_report4.py --saleyard WAG --output yardings_wag.csv
 
 # Compare lamb yardings 2023 vs 2024
-python3 fetch_report4.py \
+python3 fetchers/fetch_report4.py \
   --from 2023-01-01 \
   --to 2024-12-31 \
   --categories Lamb \
@@ -393,16 +443,16 @@ Data reported at **state × species** level, released each Friday.
 
 ```bash
 # Fetch last year's data for all species
-python3 fetch_report10.py
+python3 fetchers/fetch_report10.py
 
 # Fetch a specific date range (cross-year ranges are handled automatically)
-python3 fetch_report10.py --from 2024-01-01 --to 2024-12-31
+python3 fetchers/fetch_report10.py --from 2024-01-01 --to 2024-12-31
 
 # Filter by species
-python3 fetch_report10.py --from 2024-01-01 --to 2024-12-31 --species Cattle Lambs
+python3 fetchers/fetch_report10.py --from 2024-01-01 --to 2024-12-31 --species Cattle Lambs
 
 # See all valid species names
-python3 fetch_report10.py --list-species
+python3 fetchers/fetch_report10.py --list-species
 ```
 
 ### Options
@@ -412,7 +462,7 @@ python3 fetch_report10.py --list-species
 | `--from YYYY-MM-DD` | Jan 1 of last year | Start date |
 | `--to YYYY-MM-DD` | Today | End date |
 | `--species` | All species | Filter by one or more species (see below) |
-| `--output FILE` | `report10_nlrs_slaughter.csv` | Output CSV path |
+| `--output FILE` | `data/raw/report10_nlrs_slaughter.csv` | Output CSV path |
 | `--list-species` | — | Print valid species names and exit |
 | `--email EMAIL` | `moon.zhou@thomasfoods.com` | Contact email sent in User-Agent header |
 
@@ -448,16 +498,16 @@ result_date,contributor_state_id,species_id,slaughter_count
 
 ```bash
 # All cattle and lamb data for 2023 and 2024
-python3 fetch_report10.py \
+python3 fetchers/fetch_report10.py \
   --from 2023-01-01 \
   --to 2024-12-31 \
   --species Cattle Lambs
 
 # Queensland only workaround — filter in pandas after downloading all states
-python3 fetch_report10.py --from 2024-01-01 --to 2024-12-31 --output all_states.csv
+python3 fetchers/fetch_report10.py --from 2024-01-01 --to 2024-12-31 --output all_states.csv
 
 # Custom output file
-python3 fetch_report10.py \
+python3 fetchers/fetch_report10.py \
   --from 2025-01-01 \
   --to 2025-12-31 \
   --output slaughter_2025.csv
@@ -474,16 +524,16 @@ Updated once per day at 12am AEST.
 
 ```bash
 # Fetch all 18 indicators for the default date range (last year to today)
-python3 fetch_report5.py
+python3 fetchers/fetch_report5.py
 
 # Fetch specific date range
-python3 fetch_report5.py --from 2024-01-01 --to 2024-12-31
+python3 fetchers/fetch_report5.py --from 2024-01-01 --to 2024-12-31
 
 # Fetch specific indicators only
-python3 fetch_report5.py --indicators 1 4 7 14
+python3 fetchers/fetch_report5.py --indicators 1 4 7 14
 
 # See all valid indicator IDs
-python3 fetch_report5.py --list-indicators
+python3 fetchers/fetch_report5.py --list-indicators
 ```
 
 ### Options
@@ -493,7 +543,7 @@ python3 fetch_report5.py --list-indicators
 | `--from YYYY-MM-DD` | Jan 1 of last year | Start date |
 | `--to YYYY-MM-DD` | Today | End date |
 | `--indicators ID [ID ...]` | All (1–18) | One or more indicator IDs |
-| `--output FILE` | `report5_livestock_indicators.csv` | Output CSV path |
+| `--output FILE` | `data/raw/report5_livestock_indicators.csv` | Output CSV path |
 | `--list-indicators` | — | Print all indicator IDs and exit |
 | `--email EMAIL` | `moon.zhou@thomasfoods.com` | Contact email sent in User-Agent header |
 
@@ -542,20 +592,20 @@ calendar_date,species_id,indicator_id,indicator_desc,indicator_units,head_count,
 
 ```bash
 # All cattle price indicators for 2024
-python3 fetch_report5.py \
+python3 fetchers/fetch_report5.py \
   --from 2024-01-01 \
   --to 2024-12-31 \
   --indicators 1 2 3 4 5 12 13 14 15 17
 
 # Lamb indicators only
-python3 fetch_report5.py \
+python3 fetchers/fetch_report5.py \
   --from 2024-01-01 \
   --to 2024-12-31 \
   --indicators 6 7 8 9 10 16 \
   --output lamb_indicators_2024.csv
 
 # Single indicator — National Young Cattle Indicator (ID 14)
-python3 fetch_report5.py --indicators 14 --output nyci.csv
+python3 fetchers/fetch_report5.py --indicators 14 --output nyci.csv
 ```
 
 ---
@@ -574,19 +624,19 @@ The API accepts one `indicatorID` per request; the script iterates and combines 
 
 ```bash
 # Fetch all 18 indicators for the default date range (last year to today)
-python3 fetch_report6.py
+python3 fetchers/fetch_report6.py
 
 # Fetch a specific date range
-python3 fetch_report6.py --from 2024-01-01 --to 2024-12-31
+python3 fetchers/fetch_report6.py --from 2024-01-01 --to 2024-12-31
 
 # Fetch specific indicators only
-python3 fetch_report6.py --indicators 1 4 7
+python3 fetchers/fetch_report6.py --indicators 1 4 7
 
 # Filter by a specific saleyard
-python3 fetch_report6.py --saleyard WAG
+python3 fetchers/fetch_report6.py --saleyard WAG
 
 # See all valid indicator IDs
-python3 fetch_report6.py --list-indicators
+python3 fetchers/fetch_report6.py --list-indicators
 ```
 
 ### Options
@@ -597,7 +647,7 @@ python3 fetch_report6.py --list-indicators
 | `--to YYYY-MM-DD` | Today | End date |
 | `--indicators ID [ID ...]` | All (1–18) | One or more indicator IDs |
 | `--saleyard ID` | All saleyards | Filter by saleyard ID (e.g. `WAG`, `WOD`) |
-| `--output FILE` | `report6_saleyard_indicators.csv` | Output CSV path |
+| `--output FILE` | `data/raw/report6_saleyard_indicators.csv` | Output CSV path |
 | `--list-indicators` | — | Print all indicator IDs and exit |
 | `--email EMAIL` | `moon.zhou@thomasfoods.com` | Contact email sent in User-Agent header |
 
@@ -650,17 +700,17 @@ calendar_date,species_id,saleyard_id,indicator_id,indicator_desc,indicator_units
 
 ```bash
 # All cattle indicators at saleyard level for 2024
-python3 fetch_report6.py \
+python3 fetchers/fetch_report6.py \
   --from 2024-01-01 \
   --to 2024-12-31 \
   --indicators 1 2 3 4 5 12 13 14 15 17 \
   --output cattle_saleyard_2024.csv
 
 # National Trade Lamb Indicator (ID 7) across all saleyards
-python3 fetch_report6.py --indicators 7 --output lamb_trade_by_saleyard.csv
+python3 fetchers/fetch_report6.py --indicators 7 --output lamb_trade_by_saleyard.csv
 
 # One specific saleyard (Wagga Wagga), all indicators
-python3 fetch_report6.py --saleyard WAG --output wag_indicators.csv
+python3 fetchers/fetch_report6.py --saleyard WAG --output wag_indicators.csv
 ```
 
 ---
@@ -678,19 +728,19 @@ the script iterates both countries and combines results automatically.
 
 ```bash
 # Fetch last year, both countries (default)
-python3 fetch_report7.py
+python3 fetchers/fetch_report7.py
 
 # Fetch a specific date range
-python3 fetch_report7.py --from 2024-01-01 --to 2024-12-31
+python3 fetchers/fetch_report7.py --from 2024-01-01 --to 2024-12-31
 
 # Australian indicators only
-python3 fetch_report7.py --countries AUS
+python3 fetchers/fetch_report7.py --countries AUS
 
 # US indicators only
-python3 fetch_report7.py --countries USA
+python3 fetchers/fetch_report7.py --countries USA
 
 # See valid country IDs
-python3 fetch_report7.py --list-countries
+python3 fetchers/fetch_report7.py --list-countries
 ```
 
 ### Options
@@ -700,7 +750,7 @@ python3 fetch_report7.py --list-countries
 | `--from YYYY-MM-DD` | Jan 1 of last year | Start date |
 | `--to YYYY-MM-DD` | Today | End date |
 | `--countries` | AUS USA | Country IDs to fetch (see below) |
-| `--output FILE` | `report7_global_cattle_prices.csv` | Output CSV path |
+| `--output FILE` | `data/raw/report7_global_cattle_prices.csv` | Output CSV path |
 | `--list-countries` | — | Print valid country IDs and exit |
 | `--email EMAIL` | `moon.zhou@thomasfoods.com` | Contact email sent in User-Agent header |
 
@@ -734,13 +784,13 @@ indicator_date,species_id,country_code,indicator_desc,indicator_units,indicator_
 
 ```bash
 # Full history, both countries
-python3 fetch_report7.py --from 2000-01-01 --to 2026-04-26 --output global_cattle_all.csv
+python3 fetchers/fetch_report7.py --from 2000-01-01 --to 2026-04-26 --output global_cattle_all.csv
 
 # Australian indicators for 2024
-python3 fetch_report7.py --from 2024-01-01 --to 2024-12-31 --countries AUS --output aus_cattle_2024.csv
+python3 fetchers/fetch_report7.py --from 2024-01-01 --to 2024-12-31 --countries AUS --output aus_cattle_2024.csv
 
 # US indicators for comparison
-python3 fetch_report7.py --from 2024-01-01 --to 2024-12-31 --countries USA --output usa_cattle_2024.csv
+python3 fetchers/fetch_report7.py --from 2024-01-01 --to 2024-12-31 --countries USA --output usa_cattle_2024.csv
 ```
 
 ---
@@ -757,13 +807,13 @@ No category or country filter is required; all indicators are returned in a sing
 
 ```bash
 # Fetch last year's data (default)
-python3 fetch_report8.py
+python3 fetchers/fetch_report8.py
 
 # Fetch a specific date range
-python3 fetch_report8.py --from 2024-01-01 --to 2024-12-31
+python3 fetchers/fetch_report8.py --from 2024-01-01 --to 2024-12-31
 
 # Custom output file
-python3 fetch_report8.py --from 2024-01-01 --to 2024-12-31 --output us_prices_2024.csv
+python3 fetchers/fetch_report8.py --from 2024-01-01 --to 2024-12-31 --output us_prices_2024.csv
 ```
 
 ### Options
@@ -772,7 +822,7 @@ python3 fetch_report8.py --from 2024-01-01 --to 2024-12-31 --output us_prices_20
 |---|---|---|
 | `--from YYYY-MM-DD` | Jan 1 of last year | Start date |
 | `--to YYYY-MM-DD` | Today | End date |
-| `--output FILE` | `report8_us_cattle_prices.csv` | Output CSV path |
+| `--output FILE` | `data/raw/report8_us_cattle_prices.csv` | Output CSV path |
 | `--email EMAIL` | `moon.zhou@thomasfoods.com` | Contact email sent in User-Agent header |
 
 ### Available Indicators
@@ -806,13 +856,13 @@ Breaker Cows, Carcass Price, 75% lean,2025-01-03,US c/lb cwt,228.00
 
 ```bash
 # Full history
-python3 fetch_report8.py --from 2020-01-01 --output us_cattle_all.csv
+python3 fetchers/fetch_report8.py --from 2020-01-01 --output us_cattle_all.csv
 
 # Compare 2023 vs 2024
-python3 fetch_report8.py --from 2023-01-01 --to 2024-12-31 --output us_cattle_2023_2024.csv
+python3 fetchers/fetch_report8.py --from 2023-01-01 --to 2024-12-31 --output us_cattle_2023_2024.csv
 
 # Recent data only
-python3 fetch_report8.py --from 2025-01-01 --output us_cattle_2025.csv
+python3 fetchers/fetch_report8.py --from 2025-01-01 --output us_cattle_2025.csv
 ```
 
 ---
@@ -829,13 +879,13 @@ No category or country filter is required; all indicators are returned in a sing
 
 ```bash
 # Fetch last year's data (default)
-python3 fetch_report9.py
+python3 fetchers/fetch_report9.py
 
 # Fetch a specific date range
-python3 fetch_report9.py --from 2024-01-01 --to 2024-12-31
+python3 fetchers/fetch_report9.py --from 2024-01-01 --to 2024-12-31
 
 # Custom output file
-python3 fetch_report9.py --from 2024-01-01 --to 2024-12-31 --output us_imported_meat_2024.csv
+python3 fetchers/fetch_report9.py --from 2024-01-01 --to 2024-12-31 --output us_imported_meat_2024.csv
 ```
 
 ### Options
@@ -844,7 +894,7 @@ python3 fetch_report9.py --from 2024-01-01 --to 2024-12-31 --output us_imported_
 |---|---|---|
 | `--from YYYY-MM-DD` | Jan 1 of last year | Start date |
 | `--to YYYY-MM-DD` | Today | End date |
-| `--output FILE` | `report9_us_imported_meat_prices.csv` | Output CSV path |
+| `--output FILE` | `data/raw/report9_us_imported_meat_prices.csv` | Output CSV path |
 | `--email EMAIL` | `moon.zhou@thomasfoods.com` | Contact email sent in User-Agent header |
 
 ### Available Indicators
@@ -884,13 +934,13 @@ Cap Off Insides,2025-01-03,US c/lb,365.00
 
 ```bash
 # Full history
-python3 fetch_report9.py --from 2020-01-01 --output us_imported_meat_all.csv
+python3 fetchers/fetch_report9.py --from 2020-01-01 --output us_imported_meat_all.csv
 
 # Compare 2023 vs 2024
-python3 fetch_report9.py --from 2023-01-01 --to 2024-12-31 --output us_imported_meat_2023_2024.csv
+python3 fetchers/fetch_report9.py --from 2023-01-01 --to 2024-12-31 --output us_imported_meat_2023_2024.csv
 
 # Recent data only
-python3 fetch_report9.py --from 2025-01-01 --output us_imported_meat_2025.csv
+python3 fetchers/fetch_report9.py --from 2025-01-01 --output us_imported_meat_2025.csv
 ```
 
 ---
@@ -906,28 +956,28 @@ Requires `pandas` (`pip install pandas`).
 
 ```bash
 # Step 1 — fetch the raw data (last 1 year)
-python3 fetch_report10.py --from 2025-04-01 --to 2026-04-26
-python3 fetch_report5.py  --from 2025-04-01 --to 2026-04-26
+python3 fetchers/fetch_report10.py --from 2025-04-01 --to 2026-04-26
+python3 fetchers/fetch_report5.py  --from 2025-04-01 --to 2026-04-26
 
 # Step 2 — merge into a weekly analysis table
-python3 merge_reports.py
+python3 analysis/merge_reports.py
 ```
 
 This produces two files:
 
 | Output file | Description |
 |---|---|
-| `merged_weekly.csv` | Wide table — one row per (week_ending × species_group) |
-| `indicator_lookup.csv` | Legend: indicator_id → description, units, applies_to |
+| `data/processed/merged_weekly.csv` | Wide table — one row per (week_ending × species_group) |
+| `data/processed/indicator_lookup.csv` | Legend: indicator_id → description, units, applies_to |
 
 ### Options
 
 | Flag | Default | Description |
 |---|---|---|
-| `--r5 FILE` | `report5_livestock_indicators.csv` | Path to report/5 CSV |
-| `--r10 FILE` | `report10_nlrs_slaughter.csv` | Path to report/10 CSV |
-| `--output FILE` | `merged_weekly.csv` | Output path for the merged table |
-| `--lookup FILE` | `indicator_lookup.csv` | Output path for the indicator legend |
+| `--r5 FILE` | `data/raw/report5_livestock_indicators.csv` | Path to report/5 CSV |
+| `--r10 FILE` | `data/raw/report10_nlrs_slaughter.csv` | Path to report/10 CSV |
+| `--output FILE` | `data/processed/merged_weekly.csv` | Output path for the merged table |
+| `--lookup FILE` | `data/processed/indicator_lookup.csv` | Output path for the indicator legend |
 
 ### Output Format
 
@@ -963,19 +1013,19 @@ Column names embed the full indicator description and units, e.g.:
 ### Examples
 
 ```bash
-# Default run — uses report10_nlrs_slaughter.csv and report5_livestock_indicators.csv
-python3 merge_reports.py
+# Default run — reads data/raw/report10_*.csv + report5_*.csv, writes to data/processed/
+python3 analysis/merge_reports.py
 
 # Custom input files
-python3 merge_reports.py \
+python3 analysis/merge_reports.py \
   --r5 my_report5.csv \
   --r10 my_report10.csv \
   --output analysis_2024.csv
 
 # Full 2-year workflow from scratch
-python3 fetch_report10.py --from 2023-01-01 --to 2024-12-31
-python3 fetch_report5.py  --from 2023-01-01 --to 2024-12-31
-python3 merge_reports.py  --output merged_2023_2024.csv
+python3 fetchers/fetch_report10.py --from 2023-01-01 --to 2024-12-31
+python3 fetchers/fetch_report5.py  --from 2023-01-01 --to 2024-12-31
+python3 analysis/merge_reports.py  --output merged_2023_2024.csv
 ```
 
 ---

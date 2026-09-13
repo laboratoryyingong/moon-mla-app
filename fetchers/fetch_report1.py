@@ -1,31 +1,23 @@
 #!/usr/bin/env python3
 """
-MLA Statistics API - /report/8 US Domestic Cattle Prices Fetcher
+MLA Statistics API - /report/1 Australian Red Meat Exports Fetcher
 
-US Domestic Cattle Prices sourced from US Steiner Consulting.
-Data is updated weekly (Tuesday).
+Monthly export volumes for Australian beef and veal, broken down by
+destination country.  Data available from January 2000 to present.
 
 API Terms: https://www.mla.com.au/general/Terms-and-conditions/data-and-information/
 Contact:   insights@mla.com.au
 
 Response fields:
-    indicator_name   — price indicator name (e.g. "Fed Steer, 5-Day Average")
-    indicator_date   — date (YYYY-MM-DD)
-    indicator_units  — unit of measure (e.g. "US c/lb lwt", "US c/lb cwt")
-    indicator_value  — price value
-
-Indicators available:
-    CME Feeder Cattle Index
-    Fed Steer, 5-Day Average
-    Breaker Cows, Carcass Price, 75% lean
-    Cutter Cow, Carcass Price, 90% Lean
-    Cutter Cow Carcass Cutout
-    Bonner Cows, 85% lean
+    result_date           — month start date (YYYY-MM-01)
+    country_desc          — destination country / region
+    meat_type_group_desc  — meat category (e.g. "Beef And Veal")
+    weight_amt            — export weight (kg)
 
 Usage:
-    python fetch_report8.py
-    python fetch_report8.py --from 2024-01-01 --to 2024-12-31
-    python fetch_report8.py --output my_us_prices.csv
+    python fetchers/fetch_report1.py
+    python fetchers/fetch_report1.py --from 2022-01-01 --to 2024-12-31
+    python fetchers/fetch_report1.py --output my_exports.csv
 """
 
 import argparse
@@ -58,15 +50,18 @@ def _progress_bar(done: int, total: int, width: int = 25) -> str:
 
 
 BASE_URL  = "https://api-mlastatistics.mla.com.au"
-ENDPOINT  = "/report/8"
+ENDPOINT  = "/report/1"
 PAGE_SIZE = 100
+
+REPO_ROOT      = Path(__file__).resolve().parents[1]
+DEFAULT_OUTPUT = REPO_ROOT / "data" / "raw" / "report1_red_meat_exports.csv"
 
 DELAY_MIN  = 1.5
 DELAY_MAX  = 120.0
 DELAY_STEP = 0.25
 DELAY_MULT = 2.0
 
-CSV_FIELDS = ["indicator_name", "indicator_date", "indicator_units", "indicator_value"]
+CSV_FIELDS = ["result_date", "country_desc", "meat_type_group_desc", "weight_amt"]
 
 
 def build_url(from_date: str, to_date: str, page: int) -> str:
@@ -97,8 +92,8 @@ def fetch_all(
     progress_callback=None,
 ) -> list[dict]:
     """
-    Paginate through all /report/8 results with adaptive rate control (AIMD).
-    No category iteration or cross-year chunking required for this endpoint.
+    Paginate through all /report/1 results with adaptive rate control (AIMD).
+    Unlike /report/10 and /report/5, cross-year date ranges work fine here.
 
     progress_callback(info: dict) — optional hook for UI integration.
       info["stage"] is one of:
@@ -108,8 +103,12 @@ def fetch_all(
     all_rows = []
     page = 1
     delay = DELAY_MIN
+    total = 0
     fetch_start = time.time()
     page_times: list[float] = []
+
+    if progress_callback is None:
+        print("  Fetching page 1 ...", flush=True)
 
     while True:
         url = build_url(from_date, to_date, page)
@@ -200,7 +199,6 @@ def fetch_all(
             f"  ({rows_per_sec:.1f} rows/s,  {page} page(s))",
             flush=True,
         )
-
     return all_rows
 
 
@@ -210,6 +208,7 @@ def save_csv(rows: list[dict], output_path: str) -> None:
         return
 
     path = Path(output_path)
+    path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=CSV_FIELDS, extrasaction="ignore")
         writer.writeheader()
@@ -221,17 +220,17 @@ def save_csv(rows: list[dict], output_path: str) -> None:
 def parse_args() -> argparse.Namespace:
     today = date.today()
     default_to   = today.isoformat()
-    default_from = date(today.year - 1, 1, 1).isoformat()
+    default_from = date(today.year - 3, 1, 1).isoformat()
 
     parser = argparse.ArgumentParser(
-        description="Fetch MLA /report/8 US Domestic Cattle Prices data"
+        description="Fetch MLA /report/1 Australian Red Meat Exports data"
     )
     parser.add_argument("--from", dest="from_date", default=default_from,
                         metavar="YYYY-MM-DD", help=f"Start date (default: {default_from})")
     parser.add_argument("--to", dest="to_date", default=default_to,
                         metavar="YYYY-MM-DD", help=f"End date (default: {default_to})")
-    parser.add_argument("--output", default="report8_us_cattle_prices.csv",
-                        help="Output CSV file (default: report8_us_cattle_prices.csv)")
+    parser.add_argument("--output", default=str(DEFAULT_OUTPUT),
+                        help="Output CSV file (default: data/raw/report1_red_meat_exports.csv)")
     parser.add_argument("--email", default="moon.zhou@thomasfoods.com",
                         metavar="EMAIL",
                         help="Your contact email, included in the User-Agent header")
@@ -244,7 +243,7 @@ def main() -> None:
     run_start = time.time()
 
     print("=" * 60)
-    print("MLA Statistics API — /report/8 US Domestic Cattle Prices")
+    print("MLA Statistics API — /report/1 Australian Red Meat Exports")
     print("=" * 60)
     print(f"  Date range : {args.from_date} → {args.to_date}")
     print(f"  Output     : {args.output}")

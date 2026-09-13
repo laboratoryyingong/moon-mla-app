@@ -1,4 +1,4 @@
-# MLA Report 3 — 功能说明
+# MLA Report 10 — 功能说明
 
 ## 两种使用方式
 
@@ -14,10 +14,10 @@ streamlit run app.py
 ### 2. 命令行 CLI
 
 ```bash
-python fetch_report3.py
-python fetch_report3.py --from 2020-01-01 --to 2024-12-31
-python fetch_report3.py --category "Cattle (Excl. Calves)" Lambs
-python fetch_report3.py --output my_data.csv
+python fetchers/fetch_report3.py
+python fetchers/fetch_report3.py --from 2020-01-01 --to 2024-12-31
+python fetchers/fetch_report3.py --category "Cattle (Excl. Calves)" Lambs
+python fetchers/fetch_report3.py --output my_data.csv
 ```
 
 ---
@@ -38,7 +38,7 @@ python fetch_report3.py --output my_data.csv
 
 ---
 
-## CLI 新增输出信息（fetch_report3.py）
+## CLI 新增输出信息（fetchers/fetch_report*.py）
 
 | 输出项 | 示例 |
 |--------|------|
@@ -65,8 +65,13 @@ Bulls, Bullocks And Steers / Sheep / Lambs / Chickens / Pigs
 
 ```
 moon-mla-app/
-├── app.py                          # Streamlit Web App
-├── fetch_report3.py                # 核心抓取逻辑 + CLI 入口
-├── requirements.txt                # streamlit, pandas
-└── report3_slaughter_production.csv  # 默认输出文件
+├── app.py                      # Streamlit Web App（/report/10）
+├── fetchers/                   # 各报表抓取脚本 + CLI 入口
+│   └── fetch_report1.py … fetch_report10.py
+├── analysis/merge_reports.py   # report5 + report10 周度合并
+├── data/raw/                   # 抓取输出的 CSV（默认位置）
+├── data/processed/             # merged_weekly.csv, indicator_lookup.csv
+├── assets/                     # TFI logo
+├── docs/                       # 文档
+└── requirements.txt            # streamlit, pandas
 ```
