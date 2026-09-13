@@ -1,77 +1,82 @@
-# MLA Report 10 — 功能说明
+# Feature Overview
 
-## 两种使用方式
+## Two ways to use the tools
 
-### 1. 本地 Web App（推荐）
+### 1. Local web app (recommended for interactive use)
 
 ```bash
 pip install -r requirements.txt
-streamlit run app.py
+streamlit run app.py        # or: mla app
 ```
 
-浏览器自动打开 `http://localhost:8501`
+The browser opens at `http://localhost:8501`.
 
-### 2. 命令行 CLI
+### 2. Command line
 
 ```bash
-python fetchers/fetch_report3.py
-python fetchers/fetch_report3.py --from 2020-01-01 --to 2024-12-31
-python fetchers/fetch_report3.py --category "Cattle (Excl. Calves)" Lambs
-python fetchers/fetch_report3.py --output my_data.csv
+mla list
+mla fetch 10 --from 2024-01-01 --to 2024-12-31
+mla fetch nlrs-slaughter --species Cattle Lambs
+mla fetch 10 --output my_data.csv
 ```
 
----
-
-## Web App 功能（app.py）
-
-| 功能 | 说明 |
-|------|------|
-| 日期选择器 | 图形化选择 From / To 日期，默认近 5 年 |
-| 分类多选 | 下拉多选，留空表示抓取全部 9 个品类 |
-| 实时进度条 | 显示当前页 / 总页数、已抓行数、elapsed、ETA |
-| Rate limit 提示 | 触发 429/503 时界面显示警告并自动退避 |
-| 汇总指标 | 抓取完成后展示总行数、品类数、日期范围 |
-| 分类柱状图 | 按品类汇总 value_amt，可视化对比 |
-| 数据表格 | 全量数据预览，支持排序和过滤 |
-| 一键下载 CSV | Download CSV 按钮，直接保存到本地 |
-| Advanced 设置 | 折叠面板，可修改 User-Agent 中的联系邮箱 |
+Every fetcher can also be run directly, e.g. `python3 fetchers/fetch_report10.py --help`.
+See [CLI.md](CLI.md) for the full command reference.
 
 ---
 
-## CLI 新增输出信息（fetchers/fetch_report*.py）
+## Web app (app.py) — /report/10 NLRS Slaughter
 
-| 输出项 | 示例 |
-|--------|------|
-| 运行头部 | 日期范围、品类、输出文件、开始时间 |
-| 进度条 | `[███░░░░░░░░░░░░░░░░░░░░░░] 12%` |
-| 每页详情 | `Page 2/8  100/800 rows  2.1s/page  delay=1.5s  elapsed=6s  ETA 18s` |
-| 等待提示 | `Waiting 1.5s before page 3 ...` |
+| Feature | Description |
+|---|---|
+| Date pickers | Graphical From / To selection, default from 1 January last year to today |
+| Species multiselect | Leave empty to fetch all seven species |
+| Live progress bar | Current page / total pages, rows fetched, elapsed time, ETA |
+| Live log panel | Timestamped log of every page, wait, and warning during the fetch |
+| Rate-limit notice | On HTTP 429/503 the app shows a warning and backs off automatically |
+| Summary metrics | Total rows, number of species, and date range after the fetch |
+| Species chart | Horizontal bar chart of total slaughter by species |
+| Data table | Full result preview with sorting and filtering |
+| Download CSV | One-click download of the four output columns |
+| Advanced settings | Collapsible panel to change the contact email sent in the User-Agent header |
+| Last fetch log | The previous run's log stays available in a collapsed expander |
+
+---
+
+## CLI output (all fetchers)
+
+| Output | Example |
+|---|---|
+| Run header | Date range, filters, output file, contact email, start time |
+| Progress bar | `[███░░░░░░░░░░░░░░░░░░░░░░] 12%` |
+| Per-page detail | `Page 2/8  100/800 rows  2.1s/page  delay=1.5s  elapsed=6s  ETA 18s` |
+| Wait notice | `Waiting 1.5s before page 3 ...` |
 | Rate limit | `⚠  Rate limited (HTTP 429) — backing off to 3.0s` |
-| 抓取汇总 | `Fetch complete: 800 rows in 28s  (28.6 rows/s,  8 page(s))` |
-| 总运行时间 | `Total runtime: 29s` |
+| Fetch summary | `Fetch complete: 800 rows in 28s  (28.6 rows/s,  8 page(s))` |
+| Total runtime | `Total runtime: 29s` |
 
 ---
 
-## 支持的品类
+## Species supported by /report/10
 
 ```
-Total Red Meat / Calves / Cattle (Excl. Calves) / Cows And Heifers
-Bulls, Bullocks And Steers / Sheep / Lambs / Chickens / Pigs
+Cattle / Calves / Sheep / Lambs / Pigs / Goat / Deer
 ```
 
 ---
 
-## 文件结构
+## Project layout
 
 ```
 moon-mla-app/
-├── app.py                      # Streamlit Web App（/report/10）
-├── fetchers/                   # 各报表抓取脚本 + CLI 入口
+├── mla.py                      # Unified CLI entry point
+├── app.py                      # Streamlit web app (/report/10)
+├── fetchers/                   # One fetch script per report + CLI entry point
 │   └── fetch_report1.py … fetch_report10.py
-├── analysis/merge_reports.py   # report5 + report10 周度合并
-├── data/raw/                   # 抓取输出的 CSV（默认位置）
+├── analysis/merge_reports.py   # Weekly merge of report 5 + report 10
+├── data/raw/                   # CSV output of the fetchers (default location)
 ├── data/processed/             # merged_weekly.csv, indicator_lookup.csv
 ├── assets/                     # TFI logo
-├── docs/                       # 文档
+├── docs/                       # Documentation
 └── requirements.txt            # streamlit, pandas
 ```
